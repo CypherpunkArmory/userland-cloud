@@ -13,7 +13,7 @@ job "ssh-client" {
       driver = "docker"
 
       config {
-        image = "cypherpunkarmory/sshd:develop"
+        image = "cypherpunkarmory/box:develop"
         network_mode = "holepunch_default"
 
         labels {

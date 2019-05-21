@@ -1,0 +1,16 @@
+FROM rastasheep/ubuntu-sshd:18.04
+
+RUN apt update
+
+RUN echo "GatewayPorts yes" >> /etc/ssh/sshd_config && \
+  echo "AllowTcpForwarding yes" >> /etc/ssh/sshd_config && \
+  echo "AllowStreamLocalForwarding yes" >> /etc/ssh/sshd_config && \
+  echo "PermitTunnel yes" >> /etc/ssh/sshd_config
+
+RUN echo '#!/bin/sh\n\
+echo $SSH_KEY > /root/.ssh/authorized_keys\n\
+exec /usr/sbin/sshd -D'\
+>> /run_with_key.sh
+
+RUN chmod +x /run_with_key.sh
+ENTRYPOINT ["/run_with_key.sh"]

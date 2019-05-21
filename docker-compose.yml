@@ -56,9 +56,9 @@ services:
     image: cypherpunkarmory/sshd:develop
     volumes:
       - ${SSH_KEY}:/home/punch/.ssh/authorized_keys
-    command: bash -l -c 'chown punch:punch /home/punch/.ssh/authorized_keys && chmod 600 /home/punch/.ssh/authorized_keys && /usr/sbin/sshd -D'
+    entrypoint: /bin/bash -l -c 'chown punch:punch /home/punch/.ssh/authorized_keys && chmod 600 /home/punch/.ssh/authorized_keys && /usr/sbin/sshd -D'
     ports:
-      - "3122:22"
+      - "2022:22"
 
   mail:
     image: mailhog/mailhog
@@ -112,7 +112,7 @@ services:
     volumes:
       - "/tmp:/tmp"
       - "/tmp/nomad/data:/tmp/nomad/data"
-      - "./local_ssh.hcl:/ssh.hcl"
+      - "./local_ssh.hcl:/box.hcl"
       - "/var/run/docker.sock:/var/run/docker.sock"
     command: agent -dev -bind=0.0.0.0 -consul-address=consul:8500 -consul-auto-advertise=0
 

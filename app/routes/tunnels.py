@@ -22,6 +22,9 @@ from app.utils.errors import (
 from app.utils.json import dig, json_api
 from typing import Tuple
 
+import rollbar
+import sys
+
 
 tunnel_blueprint = Blueprint("tunnel", __name__)
 
@@ -59,6 +62,7 @@ def start_tunnel() -> Tuple[Response, int]:
         except SubdomainLimitReached:
             return json_api(SubdomainLimitReached, ErrorSchema), 403
         except TunnelError:
+            rollbar.report_exc_info(sys.exc_info())
             return json_api(TunnelError, ErrorSchema), 500
 
         return json_api(tunnel_info, TunnelSchema), 201

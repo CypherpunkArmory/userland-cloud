@@ -34,8 +34,8 @@ services:
     build:
       context: .
       args:
-        - APP_NAME=holepunch
-    image: holepunch
+        - APP_NAME=userland
+    image: userland
     environment:
       - DATABASE_URL=postgres@db:5432
       - CONSUL_HOST=consul
@@ -43,7 +43,7 @@ services:
       - FLASK_APP=${FLASK_APP}
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - .:/holepunch
+      - .:/userland
     depends_on:
       - db
       - consul
@@ -53,12 +53,12 @@ services:
       - jobs
 
   jump:
-    image: cypherpunkarmory/sshd:develop
+    image: cypherpunkarmory/box:5-ula-alpha
     volumes:
-      - ${SSH_KEY}:/home/punch/.ssh/authorized_keys
-    entrypoint: /bin/bash -l -c 'chown punch:punch /home/punch/.ssh/authorized_keys && chmod 600 /home/punch/.ssh/authorized_keys && /usr/sbin/sshd -D'
+      - ~/.ssh/authorized_keys:/home/punch/.ssh/authorized_keys
+    entrypoint: bash -l -c 'chown punch:punch /home/punch/.ssh/authorized_keys && chmod 600 /home/punch/.ssh/authorized_keys && /usr/sbin/sshd -D'
     ports:
-      - "2022:22"
+      - "3122:22"
 
   mail:
     image: mailhog/mailhog
@@ -85,7 +85,7 @@ services:
   jobs:
     <<: *default
     volumes:
-      - .:/holepunch
+      - .:/userland
     command: bash -l -c 'python -m flask rq worker'
     ports:
       - "4442:4442"
@@ -132,3 +132,4 @@ services:
 
 volumes:
   postgres:
+  userland:

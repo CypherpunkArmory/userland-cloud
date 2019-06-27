@@ -30,7 +30,7 @@ tasks:
     prefix: 'setup_box'
     desc: Build a development SSH container and schedule it on the local nomad
     cmds:
-      - docker build -f Dockerfile.box -t cypherpunkarmory/box:develop .
+      - docker build -f Dockerfile.box -t cypherpunkarmory/box:5-ula-alpha .
       - docker-compose up -d nomad
       - docker-compose run nomad job run /box.hcl
 

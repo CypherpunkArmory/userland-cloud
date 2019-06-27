@@ -13,8 +13,8 @@ job "ssh-client" {
       driver = "docker"
 
       config {
-        image = "cypherpunkarmory/box:develop"
-        network_mode = "holepunch_default"
+        image = "cypherpunkarmory/box:5-ula-alpha"
+        network_mode = "private-holes_default"
 
         labels {
           "io.holepunch.sshd" = "${NOMAD_META_BOX_NAME}"
@@ -87,7 +87,7 @@ job "ssh-client" {
 
       resources {
         cpu    = 100 # MHz
-        memory = 2000 # MB
+        memory = 200 # MB
 
         network {
           mbits = 1

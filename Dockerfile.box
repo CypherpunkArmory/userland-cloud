@@ -11,14 +11,20 @@ RUN echo "GatewayPorts yes" >> /etc/ssh/sshd_config && \
   
 
 # Allow SSH Access and give shell for the punch user
-RUN useradd -m -s /bin/sh punch && \
+RUN useradd -m -s /bin/bash punch && \
   mkdir /home/punch/.ssh && \
   chown punch:punch /home/punch/.ssh && \
   chmod 0700 /home/punch/.ssh && \
   touch /home/punch/.ssh/authorized_keys && \
   chown punch:punch /home/punch/.ssh/authorized_keys && \
   chmod 0600 /home/punch/.ssh/authorized_keys && \
-  echo "punch:*" | chpasswd -e
+  echo "punch:userland" | chpasswd &&  \
+  usermod -aG sudo punch && \
+  touch /home/punch/.sudo_as_admin_successful
+
+# Allow user to have access to root
+RUN apt -y install sudo
+RUN echo "root:userland" | chpasswd
 
 RUN apt -y install trickle
 

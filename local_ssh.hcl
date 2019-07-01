@@ -22,8 +22,6 @@ job "ssh-client" {
 
         port_map {
           ssh = 22
-          http = 3000
-          https = 3001
         }
       }
 
@@ -47,44 +45,6 @@ job "ssh-client" {
         }
       }
 
-      service {
-        name = "box-${NOMAD_META_BOX_NAME}-http"
-
-        tags = [
-          "urlprefix-${NOMAD_META_BOX_NAME}.${NOMAD_META_BASE_URL}/ proto=http",
-        ]
-
-        port = "http"
-
-        check {
-          name = "http-$${NOMAD_META_BOX_NAME}-up"
-          address_mode = "driver"
-          port = "http"
-          type = "tcp"
-          interval = "10s"
-          timeout = "2s"
-        }
-      }
-
-      service {
-        name = "box-${NOMAD_META_BOX_NAME}-https"
-
-        tags = [
-          "urlprefix-${NOMAD_META_BOX_NAME}.${NOMAD_META_BASE_URL}/ proto=tcp+sni"
-        ]
-
-        port = "https"
-
-        check {
-          name = "https-${NOMAD_META_BOX_NAME}-up"
-          address_mode = "driver"
-          port = "https"
-          type = "tcp"
-          interval = "10s"
-          timeout = "2s"
-        }
-      }
-
       resources {
         cpu    = 100 # MHz
         memory = 200 # MB
@@ -96,8 +56,6 @@ job "ssh-client" {
           # be something like "46283", but we refer to it via the
           # label "http".
           port "ssh" {}
-          port "http" {}
-          port "https" {}
         }
       }
     }

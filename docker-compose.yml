@@ -102,6 +102,8 @@ services:
     image: cypherpunkarmory/local-nomad:develop
     cap_add:
       - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
     environment:
       NOMAD_DATA_DIR: /tmp/nomad/data
       NOMAD_RUN_ROOT: 1

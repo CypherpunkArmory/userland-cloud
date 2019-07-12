@@ -60,7 +60,7 @@ services:
       - "12111:12111"
 
   jump:
-    image: cypherpunkarmory/box:5-ula-alpha
+    image: cypherpunkarmory/box:develop
     volumes:
       - ${SSH_KEY}:/home/punch/.ssh/authorized_keys
     entrypoint: bash -l -c 'chown punch:punch /home/punch/.ssh/authorized_keys && chmod 600 /home/punch/.ssh/authorized_keys && /usr/sbin/sshd -D'

@@ -57,7 +57,7 @@ class InternalServerError(JsonApiException):
 
     title = "InternalServerError"
     status = "500"
-    detail = "Holepunch has encountered an internal error - please report this at github.com/cypherpunkarmory/holepunch"
+    detail = "Userland Cloud has encountered an internal error - please report this at github.com/cypherpunkarmory/userland-cloud"
 
 
 class TunnelError(JsonApiException):

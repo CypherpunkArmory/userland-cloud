@@ -35,7 +35,7 @@ services:
       context: .
       args:
         - APP_NAME=userland
-    image: userland
+    image: box
     environment:
       - DATABASE_URL=postgres@db:5432
       - CONSUL_HOST=consul
@@ -72,6 +72,7 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
   web:
     <<: *default
     command: bash -l -c 'python -m flask run -h 0.0.0.0'
@@ -98,6 +99,11 @@ services:
       - "4442:4442"
     depends_on:
       - redis
+
+  scheduler:
+    <<: *default
+    build: .
+    command: python -m flask rq scheduler
 
   consul:
     image: consul

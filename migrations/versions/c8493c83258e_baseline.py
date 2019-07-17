@@ -16,7 +16,7 @@ depends_on = None
 
 
 def upgrade():
-    # docker exec holepunch_db_1 createdb -U postgres holepunch_development
+    # docker exec userland_db_1 createdb -U postgres userland_development
     op.create_table(
         "user",
         sa.Column("id", sa.Integer(), nullable=False),

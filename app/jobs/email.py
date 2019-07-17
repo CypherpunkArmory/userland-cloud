@@ -18,7 +18,7 @@ class Email:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = self.subject
         msg["From"] = email.utils.formataddr(
-            ("Holepunch NOREPLY", "noreply@holepunch.io")
+            ("Userland Cloud NOREPLY", "noreply@userland.tech")
         )
         msg["To"] = email_address
         part1 = MIMEText(self.body_text, "plain")
@@ -30,7 +30,7 @@ class Email:
         else:
             server = smtplib.SMTP(self.host, self.port)
         server.login(self.smtp_username, self.smtp_password)
-        server.sendmail("noreply@holepunch.io", email_address, msg.as_string())
+        server.sendmail("noreply@userland.tech", email_address, msg.as_string())
         server.close()
         pass
 
@@ -38,13 +38,13 @@ class Email:
 @Q.job(func_or_queue="email", timeout=60000)
 def send_beta_backlog_notification_email(email_address):
     email = Email()
-    email.subject = "Holepunch beta"
+    email.subject = "Userland Cloud beta"
     email.body_text = "We have reached the limit on beta users. We will notify you when space has opened up."
     email.body_html = f"""
 <html>
 <head></head>
 <body>
-<h1>Holepunch email confirmation</h1>
+<h1>Userland Cloud email confirmation</h1>
     <p>We have reached the limit on beta users. We will notify you when space has opened up.</p>
     </body>
 </html>
@@ -61,7 +61,7 @@ def send_confirm_email(email_address, token_url):
 <html>
 <head></head>
 <body>
-<h1>Holepunch email confirmation</h1>
+<h1>Userland Cloud email confirmation</h1>
     <p>Visit <a href="{token_url}">{token_url}</a> to confirm your account.</p>
     </body>
 </html>
@@ -72,19 +72,19 @@ def send_confirm_email(email_address, token_url):
 @Q.job(func_or_queue="email", timeout=60000)
 def send_password_change_confirm_email(email_address):
     email = Email()
-    email.subject = "You've successfully changed your Holepunch password"
+    email.subject = "You've successfully changed your Userland Cloud password"
     email.body_text = ""
     email.body_html = f"""
                 <html>
                 <head></head>
                 <body>
                     <h1>
-                        Holepunch Password Change Confirmation
+                        Userland Cloud Password Change Confirmation
                     </h1>
-                    <p>Your Holepunch account password was recently changed.</p>
-                    <p>If you didn't make this change, please let us know at support@holepunch.io</p>
+                    <p>Your Userland Cloud account password was recently changed.</p>
+                    <p>If you didn't make this change, please let us know at support@userland.tech</p>
                     <p>Thanks!</p>
-                    <p> - The Holepunch Team</p>
+                    <p> - The Userland Cloud Team</p>
                 </body>
                 </html>
                 """
@@ -95,20 +95,20 @@ def send_password_change_confirm_email(email_address):
 @Q.job(func_or_queue="email", timeout=60000)
 def send_password_reset_confirm_email(email_address, token_url):
     email = Email()
-    email.subject = "Reset your Holepunch Password"
+    email.subject = "Reset your Userland Cloud Password"
     email.body_text = "Click this link to reset your password: " + token_url
     email.body_html = f"""
                     <html>
                     <head></head>
                     <body>
                         <h1>
-                            Holepunch Password Reset Request
+                            Userland Cloud Password Reset Request
                         </h1>
-                        <p>You've requested that the password for your Holepunch account be reset.</p>
+                        <p>You've requested that the password for your Userland Cloud account be reset.</p>
                         <p>Visit <a href="{token_url}">{token_url}</a> to reset your password.</p>
-                        <p>If you didn't make this change, please let us know at support@holepunch.io</p>
+                        <p>If you didn't make this change, please let us know at support@userland.tech</p>
                         <p>Thanks!</p>
-                        <p> - The Holepunch Team</p>
+                        <p> - The Userland Cloud Team</p>
                     </body>
                     </html>
                     """
@@ -119,19 +119,19 @@ def send_password_reset_confirm_email(email_address, token_url):
 @Q.job(func_or_queue="email", timeout=60000)
 def send_email_change_confirm_email(email_address):
     email = Email()
-    email.subject = "You've successfully changed your Holepunch email"
+    email.subject = "You've successfully changed your Userland Cloud email"
     email.body_text = ""
     email.body_html = f"""
                     <html>
                     <head></head>
                     <body>
                         <h1>
-                            Holepunch Email Change Confirmation
+                            Userland Cloud Email Change Confirmation
                         </h1>
-                        <p>Your Holepunch account email was recently changed.</p>
-                        <p>If you didn't make this change, please let us know at support@holepunch.io</p>
+                        <p>Your Userland account email was recently changed.</p>
+                        <p>If you didn't make this change, please let us know at support@userland.tech</p>
                         <p>Thanks!</p>
-                        <p> - The Holepunch Team</p>
+                        <p> - The Userland Cloud Team</p>
                     </body>
                     </html>
                     """

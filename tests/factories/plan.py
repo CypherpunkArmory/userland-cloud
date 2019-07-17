@@ -15,7 +15,7 @@ class PlanFactory(Factory):
     reserved_subdomains = 5
     cost = 999
     name = "paid"
-    stripe_id = "holepunch_paid"
+    stripe_id = "userland_paid"
 
     class Params:
         paid = True

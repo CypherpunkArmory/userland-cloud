@@ -22,16 +22,16 @@ class TestConfig(Config):
     MAIL_USE_TLS = False
     MAIL_USERNAME = ""
     MAIL_PASSWORD = ""
-    MAIL_DEFAULT_SENDER = "noreply@holepunch.io"
+    MAIL_DEFAULT_SENDER = "noreply@userland.io"
 
     TESTING = True
 
     SQLALCHEMY_DATABASE_URI = (
-        f'postgresql://{os.environ.get("DATABASE_URL")}/holepunch_test'
+        f'postgresql://{os.environ.get("DATABASE_URL")}/userland_test'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="holepunch.box")
+    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="userland.box")
     SEA_HOST = os.environ.get("SEA_HOST", default="nomad")
     DNS_ADDR = os.environ.get("DNS_ADDR", default="127.0.0.11")
     STRIPE_KEY = os.environ.get("STRIPE_KEY", default="notconfigured")
@@ -61,15 +61,15 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = False
     MAIL_USERNAME = ""
     MAIL_PASSWORD = ""
-    MAIL_DEFAULT_SENDER = "noreply@holepunch.io"
+    MAIL_DEFAULT_SENDER = "noreply@userland.io"
 
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = (
-        f'postgresql://{os.environ.get("DATABASE_URL")}/holepunch_development'
+        f'postgresql://{os.environ.get("DATABASE_URL")}/userland_development'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="holepunch.box")
+    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="userland.box")
     SEA_HOST = os.environ.get("SEA_HOST", default="0.0.0.0")
     DNS_ADDR = os.environ.get("DNS_ADDR", default="127.0.0.11")
     STRIPE_KEY = os.environ.get("STRIPE_KEY", default="notconfigured")
@@ -96,14 +96,14 @@ class ProductionConfig(Config):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = "noreply@holepunch.io"
+    MAIL_DEFAULT_SENDER = "noreply@userland.io"
 
     SQLALCHEMY_DATABASE_URI = (
-        f'postgresql://{os.environ.get("DATABASE_URL")}/holepunch_production'
+        f'postgresql://{os.environ.get("DATABASE_URL")}/userland_production'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="holepunch.io")
+    BASE_SERVICE_URL = os.environ.get("BASE_SERVICE_URL", default="userland.io")
     SEA_HOST = os.environ.get("SEA_HOST", default="nomad")
     DNS_ADDR = os.environ.get("DNS_ADDR", default="172.17.0.1")
     STRIPE_KEY = os.environ.get("STRIPE_KEY", default="notconfigured")

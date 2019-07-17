@@ -60,8 +60,8 @@ def create_app(env: str = "development"):
     stripe.api_base = app.config["STRIPE_ENDPOINT"]
     from app.jobs.nomad_cleanup import check_all_boxes
 
-    # queue job every day at noon (UTC!)
-    check_all_boxes.cron("0 0 12 * *", "Check running tunnels")
+    # queue job hour
+    check_all_boxes.cron("0 * * * *", "Check running tunnels")
     from app.routes.tunnels import tunnel_blueprint
     from app.routes.subdomains import subdomain_blueprint
     from app.routes.authentication import auth_blueprint

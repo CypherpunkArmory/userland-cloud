@@ -49,15 +49,15 @@ def create_product_command():
 
 
 def create_product():
-    """ Create Stripe Products for Holepunch """
+    """ Create Stripe Products for Userland """
     for plan in Plan.query.all():
         if plan.cost == 0:
             continue
 
-        stripe.Product.create(name="Holepunch.io", type="service", id=plan.name)
+        stripe.Product.create(name="Userland.io", type="service", id=plan.name)
         stripe_plan = stripe.Plan.create(
             product=plan.name,
-            nickname=f"Holepunch Service: {plan.name}",
+            nickname=f"Userland Service: {plan.name}",
             interval="month",
             currency="usd",
             amount=plan.cost,
@@ -76,7 +76,7 @@ def populate_command():
 
 
 def populate():
-    """ Create DB Entries for Holepunch Plans"""
+    """ Create DB Entries for Userland Cloud Plans"""
 
     for plan_name, plan in LIMITS.items():
         p = Plan(**{"name": plan_name}, **plan)

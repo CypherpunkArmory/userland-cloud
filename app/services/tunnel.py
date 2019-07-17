@@ -2,11 +2,13 @@ from typing import Tuple, cast
 
 import nomad
 from dpath.util import values
+from datetime import timedelta, datetime
 
 from app import db
 from app.jobs.nomad_cleanup import cleanup_old_nomad_box
 from app.models import Subdomain, Tunnel, User
 from app.services.subdomain import SubdomainCreationService
+from app.jobs.nomad_cleanup import expire_running_box
 from app.utils.errors import (
     AccessDenied,
     TunnelError,
@@ -29,11 +31,14 @@ class TunnelCreationService:
         subdomain_id: Optional[int],
         port_type: list,
         ssh_key: str,
+        session_length: int = 30 # minutes
     ):
 
         self.port_type = port_type
         self.ssh_key = ssh_key
         self.current_user = current_user
+        self.session_end_time = datetime.utcnow() + timedelta(minutes=session_length)
+        self.session_length = session_length
 
         if subdomain_id:
             self.subdomain = Subdomain.query.get(subdomain_id)
@@ -70,6 +75,7 @@ class TunnelCreationService:
             job_id=job_id,
             ssh_port=ssh_port,
             ip_address=ip_address,
+            session_end_time=self.session_end_time
         )
 
         tunnel.subdomain = self.subdomain
@@ -77,6 +83,13 @@ class TunnelCreationService:
         db.session.add(tunnel)
         db.session.add(self.subdomain)
         db.session.flush()
+
+        expire_running_box.schedule(
+            timedelta(minutes=self.session_length),
+            self.current_user,
+            tunnel,
+            timeout=30
+        )
 
         return tunnel
 

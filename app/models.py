@@ -1,5 +1,5 @@
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy import types
+from sqlalchemy import types, DateTime
 from werkzeug import check_password_hash, generate_password_hash
 from app import db
 from sqlalchemy.dialects.postgresql import UUID
@@ -89,6 +89,7 @@ class User(db.Model):  # type: ignore
     def limits(self):
         return self.plan.limits()
 
+    @property
     def tier(self):
         return self.plan.name
 
@@ -101,6 +102,7 @@ class Tunnel(db.Model):  # type: ignore
     job_id = db.Column(db.String(64))
     ip_address = db.Column(db.String(32))
     subdomain = db.relationship("Subdomain", backref="tunnel", lazy="joined")
+    session_end_time = db.Column(DateTime())
 
     user = association_proxy("subdomain", "user")
 

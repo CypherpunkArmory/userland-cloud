@@ -27,7 +27,7 @@ x-deploy-vars: &x-deploy-vars
   HP_TAG:
     sh: |
       if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-        git describe --abbrev=0 --tags --match "holepunch-*" | awk -F'[.]' '{gsub("holepunch-",""); print $1"."$2"."$3}'
+        git describe --abbrev=0 --tags --match "userland-*" | awk -F'[.]' '{gsub("userland-",""); print $1"."$2"."$3}'
       elif [ "{{.HP_TAG}}" != "<no value>" ]; then
         echo "{{.HP_TAG}}";
       else
@@ -87,16 +87,17 @@ tasks:
     cmds:
       - docker-compose stop db
       - docker-compose rm -f db
-      - docker volume rm holepunch_postgres || :
+      - docker volume rm private-holes_postgres || :
       - docker-compose up -d db
       - sleep 3
       - docker-compose exec db createdb -U postgres holepunch_development
       - docker-compose exec db createdb -U postgres holepunch_test
       - docker-compose run web flask db upgrade
+      - docker-compose run web python -m flask plan populate
 
   setup_net:
     prefix: 'setup_net'
-    desc: Setup the extra interface for Holepunch Nomad
+    desc: Setup the extra interface for Userland Nomad
     vars:
       LOOPBACK_ALIAS: 172.16.123.1
     cmds:
@@ -110,12 +111,12 @@ tasks:
       - docker-compose up -d nomad
       - docker-compose run nomad job run /box.hcl
 
-  clean_tunnels:
+  clean_boxes:
     prefix: 'clean'
-    desc: Shutdown All Running Tunnels and Destroy Unreserved Subdomains
+    desc: Shutdown All Running Boxes and Destroy Unreserved Subdomains
     cmds:
       - nomad job status | grep "ssh-client/dispatch" | cut -d ' ' -f1 | xargs -I '{}' sh -lc 'yes | nomad job stop --purge {}'
-      - echo "delete from tunnel; delete from subdomain where reserved is false" | psql -U postgres -h 0.0.0.0 -d holepunch_development
+      - echo "delete from box; delete from subdomain where reserved is false" | psql -U postgres -h 0.0.0.0 -d holepunch_development
 
   add_host:
     prefix: 'add_host'
@@ -141,36 +142,26 @@ tasks:
     prefix: 'release-box'
     desc: Push an SSH container release to Dockerhub
     vars:
-      VER: '{{ default "next" .VER }}'
-      NEXT_TAG:
-        sh: |
-          if [ "{{.VER}}" = "next" ] && [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-            git describe --abbrev=0 --tags --match "box*" | awk -F'[.]' '{gsub("box-",""); print $1"."$2"."$3+1}';
-          elif [ "{{.VER}}" != "next" ] && [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-            echo "{{.VER}}";
-          else
-            git rev-parse --abbrev-ref HEAD
-          fi
+      KIND: "ssh"
+      <<: *x-release-vars
     sources:
-      - Dockerfile.box
-    method: none
-    precondition:
-      - sh: |
-          if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]; then
-            test -z $(git tag --points-at HEAD | grep 'box');
-          fi
+      - ./Dockerfile.box
+    method: checksum
+    preconditions:
+      - sh: git describe --abbrev=0 --tags --match "box-*"
         msg: "This commit is already tagged for box"
+    status: *x-release-status
     cmds:
-      - echo "Updating API from {{.RELEASED_TAG}} to box-{{.NEXT_TAG}}"
+      - echo "Updating SSH from {{.RELEASED_TAG}} to box-{{.NEXT_TAG}}"
       - docker build -f Dockerfile.box -t cypherpunkarmory/box:{{.NEXT_TAG}} .
       - docker push cypherpunkarmory/box:{{.NEXT_TAG}}
-      - if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then git tag box-{{.NEXT_TAG}}; git push origin box-{{.NEXT_TAG}}; fi
+      - *x-cmd-tag-if-master
 
   release:
     prefix: 'release'
-    desc: Push a holepunch release to Dockerhub
+    desc: Push a userland release to Dockerhub
     vars:
-      KIND: 'holepunch'
+      KIND: 'userland'
       <<: *x-release-vars
     sources:
       - app/**/*.py
@@ -181,13 +172,13 @@ tasks:
       - Dockerfile.production
     method: checksum
     preconditions:
-      - sh: git describe --abbrev=0 --tags --match "holepunch-*"
-        msg: "No tags matching holepunch found"
+      - sh: git describe --abbrev=0 --tags --match "userland-*"
+        msg: "No tags matching userland found"
     status: *x-release-status
     cmds:
       - echo "Updating API from {{.RELEASED_TAG}} to {{.KIND}}-{{.NEXT_TAG}}"
-      - docker build --build-arg APP_NAME=holepunch --build-arg SOURCE_COMMIT={{.SOURCE_COMMIT}} -f Dockerfile.production -t cypherpunkarmory/holepunch-production:{{.NEXT_TAG}} .
-      - docker push cypherpunkarmory/holepunch-production:{{.NEXT_TAG}}
+      - docker build --build-arg APP_NAME=userland --build-arg SOURCE_COMMIT={{.SOURCE_COMMIT}} -f Dockerfile.production -t cypherpunkarmory/userland-production:{{.NEXT_TAG}} .
+      - docker push cypherpunkarmory/userland-production:{{.NEXT_TAG}}
       - *x-cmd-tag-if-master
 
   vault-login:
@@ -204,7 +195,7 @@ tasks:
 
   cold-deploy:
     prefix: 'cold deploy'
-    desc: Deploy the holepunch app to a new cluster
+    desc: Deploy the userland app to a new cluster
     dir: deploy
     deps:
       - task: vault-login
@@ -213,12 +204,12 @@ tasks:
           ANSIBLE_VAULT_PATH: '{{.ANSIBLE_VAULT_PATH}}'
           WORKSPACE: '{{.WORKSPACE}}'
     status:
-      - nomad job status | grep "holepunch"
+      - nomad job status | grep "userland"
     vars: *x-deploy-vars
     preconditions: *x-deploy-pre
     cmds:
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "holepunch_deploy_version={{.HP_TAG}}" -out "planfile"
+      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
       - terraform apply "planfile"
 
   cluster-exec:
@@ -239,7 +230,7 @@ tasks:
       - "[ '{{.HOOK}}' == 'none' ]"
     cmds:
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -target nomad_job.holepunch_hook -var "hook={{.HOOK}}" -var "holepunch_deploy_version={{.HP_TAG}}" -out "hookfile"
+      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version={{.HP_TAG}}" -out "hookfile"
       - if [ "$(terraform show hookfile)" = "This plan does nothing." ]; then
           echo "No hook to execute";
           exit 0;
@@ -248,13 +239,13 @@ tasks:
       - |
         export NOMAD_ADDR={{.NOMAD_ADDR}}
         echo "Waiting for hook to finish."
-        nomad job status holepunch-hook | sed -n '/^Allocations/,$p' | sed -n '1!p'
+        nomad job status userland-hook | sed -n '/^Allocations/,$p' | sed -n '1!p'
         green=$(tput setaf 2)
         red=$(tput setaf 1)
         complete=""
         check_count=0
         while [ "$complete" != "complete" ] && [ "$complete" != "failed" ]; do
-          alloc=$(nomad job status holepunch-hook | sed -n '/^Allocations/,$p' | sed -n '3p')
+          alloc=$(nomad job status userland-hook | sed -n '/^Allocations/,$p' | sed -n '3p')
           complete=$(echo -e "$alloc" |  awk '{ print $6 }')
 
           if [ "$complete" = "complete" ]; then
@@ -265,13 +256,13 @@ tasks:
             echo $red;
           fi
           
-      BOX_TAG:
-        sh: |
-          if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-            git describe --abbrev=0 --tags --match "ssh-*" | awk -F'[.]' '{gsub("ssh-",""); print $1"."$2"."$3}'
-          else
-            git rev-parse --abbrev-ref HEAD
-          fi
+        // BOX_TAG:
+        // sh: |
+        //   if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
+        //     git describe --abbrev=0 --tags --match "ssh-*" | awk -F'[.]' '{gsub("ssh-",""); print $1"."$2"."$3}'
+        //   else
+        //     git rev-parse --abbrev-ref HEAD
+        //   fi
 
           echo -e "$alloc"
           check_count=$((check_count+1))
@@ -285,18 +276,18 @@ tasks:
         echo "--- Task Stderr ---"
         nomad alloc logs --stderr $(echo "$alloc"  | awk '{ print $1 }')
         echo -e "\n\n"
-      - nomad job stop -purge holepunch-hook
-      - terraform destroy --auto-approve -target nomad_job.holepunch_hook
+      - nomad job stop -purge userland-hook
+      - terraform destroy --auto-approve -target nomad_job.userland_hook
       - rm hookfile
 
   deploy:
     prefix: 'deploy'
-    desc: Deploy the holepunch app
+    desc: Deploy the userland app
     dir: deploy
     deps:
       - task: release
         vars:
-          KIND: "holepunch"
+          KIND: "userland"
       - task: release
         vars:
           KIND: "ssh"
@@ -317,7 +308,7 @@ tasks:
           WORKSPACE: "{{.WORKSPACE}}"
           HOOK: "{{.HOOK}} pre"
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "holepunch_deploy_version={{.HP_TAG}}" -out "planfile"
+      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
       - terraform apply "planfile"
       - sleep 1
       - |

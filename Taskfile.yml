@@ -111,9 +111,9 @@ tasks:
       - docker-compose up -d nomad
       - docker-compose run nomad job run /box.hcl
 
-  clean_tunnels:
+  clean_boxes:
     prefix: 'clean'
-    desc: Shutdown All Running Tunnels and Destroy Unreserved Subdomains
+    desc: Shutdown All Running Boxes and Destroy Unreserved Subdomains
     cmds:
       - nomad job status | grep "ssh-client/dispatch" | cut -d ' ' -f1 | xargs -I '{}' sh -lc 'yes | nomad job stop --purge {}'
       - echo "delete from tunnel; delete from subdomain where reserved is false" | psql -U postgres -h 0.0.0.0 -d userland_development

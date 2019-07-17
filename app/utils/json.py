@@ -1,10 +1,13 @@
 import json
 import os
+import importlib
 from flask import make_response
 from jsonschema import RefResolver, validate, ValidationError
-from typing import Union, Dict
+from typing import Union, Dict, Any
+from mypy_extensions import TypedDict
 from dpath.util import get
 from flask import Response
+from inflection import camelize
 
 
 def json_api(resource, resource_class, many=False) -> Response:
@@ -19,6 +22,17 @@ def dig(obj, keypath, default=None):
         return get(obj, keypath)
     except KeyError:
         return default
+
+
+Locator = TypedDict("Locator", {"type": str, "id": Union[str, int]})
+
+
+def locate(locator: Locator) -> Any:
+    # This doesn't actually seem to typecheck - not sure why
+    klass = camelize(locator["type"])
+    model_id = locator["id"]
+    models = importlib.import_module("app.models")
+    return getattr(models, klass).query.get(model_id)
 
 
 class JSONSchemaManager:

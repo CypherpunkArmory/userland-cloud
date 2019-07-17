@@ -2,7 +2,6 @@ import nomad
 from app import Q
 from app.utils.dns import discover_service
 from datetime import timedelta, datetime
-import os
 
 from app.models import Box
 

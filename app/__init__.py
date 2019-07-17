@@ -16,6 +16,9 @@ from werkzeug.contrib.fixers import ProxyFix
 import rollbar
 import rollbar.contrib.flask
 import stripe
+import logging
+import app.settings as settings
+
 from packaging import version
 
 from app.utils.json import JSONSchemaManager, json_api
@@ -42,11 +45,11 @@ momblish = load_corpus()
 json_schema_manager = JSONSchemaManager("../support/schemas")
 Q = RQ()
 Q.queues = ["email", "nomad"]
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def create_app(env: str = "development"):
-    import app.settings as settings
-
     app = Flask(__name__)
     app.config.from_object(settings.app_config[env])
 
@@ -66,6 +69,7 @@ def create_app(env: str = "development"):
     from app.routes.config import config_blueprint
     from app.routes.authentication import auth_blueprint
     from app.routes.account import account_blueprint
+    from app.routes.admin import admin_blueprint
     from app.routes.root import root_blueprint
     from app.commands import plan
 
@@ -81,6 +85,7 @@ def create_app(env: str = "development"):
     app.register_blueprint(box_blueprint)
     app.register_blueprint(config_blueprint)
     app.register_blueprint(account_blueprint)
+    app.register_blueprint(admin_blueprint)
     app.register_blueprint(root_blueprint)
     app.cli.add_command(plan)
 

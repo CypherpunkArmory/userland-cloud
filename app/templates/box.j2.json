@@ -45,7 +45,7 @@
           "MaxParallel": 1,
           "MinHealthyTime": 10000000000
         },
-        "Name": "holepunch",
+        "Name": "userland",
         "ReschedulePolicy": {
           "Attempts": 0,
           "Delay": 30000000000,

@@ -1,0 +1,346 @@
+interactions:
+- request:
+    body: email=user%40userland.tech&description=ULA+TEST+2019-08-08+06%3A37%3A53.618615+None
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '83'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Idempotency-Key:
+      - 3cb3f1ec-2c56-489e-8fcd-7ff1186e6c2a
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_wDb3W4koB0huQF", "request_duration_ms":
+        117}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body:
+      string: "{\n  \"id\": \"cus_FaFltzn4xjAgHB\",\n  \"object\": \"customer\",\n
+        \ \"account_balance\": 0,\n  \"address\": null,\n  \"balance\": 0,\n  \"created\":
+        1565246273,\n  \"currency\": null,\n  \"default_source\": null,\n  \"delinquent\":
+        false,\n  \"description\": \"ULA TEST 2019-08-08 06:37:53.618615 None\",\n
+        \ \"discount\": null,\n  \"email\": \"user@userland.tech\",\n  \"invoice_prefix\":
+        \"28997AF5\",\n  \"invoice_settings\": {\n    \"custom_fields\": null,\n    \"default_payment_method\":
+        null,\n    \"footer\": null\n  },\n  \"livemode\": false,\n  \"metadata\":
+        {\n  },\n  \"name\": null,\n  \"phone\": null,\n  \"preferred_locales\": [\n\n
+        \ ],\n  \"shipping\": null,\n  \"sources\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n\n    ],\n    \"has_more\": false,\n    \"total_count\":
+        0,\n    \"url\": \"/v1/customers/cus_FaFltzn4xjAgHB/sources\"\n  },\n  \"subscriptions\":
+        {\n    \"object\": \"list\",\n    \"data\": [\n\n    ],\n    \"has_more\":
+        false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_FaFltzn4xjAgHB/subscriptions\"\n
+        \ },\n  \"tax_exempt\": \"none\",\n  \"tax_ids\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n\n    ],\n    \"has_more\": false,\n    \"total_count\":
+        0,\n    \"url\": \"/v1/customers/cus_FaFltzn4xjAgHB/tax_ids\"\n  },\n  \"tax_info\":
+        null,\n  \"tax_info_verification\": null\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1171'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:53 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      idempotency-key:
+      - 3cb3f1ec-2c56-489e-8fcd-7ff1186e6c2a
+      original-request:
+      - req_ReFrEq1JGq16sW
+      request-id:
+      - req_ReFrEq1JGq16sW
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: customer=cus_FaFltzn4xjAgHB
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Idempotency-Key:
+      - ed2a85dd-a5f6-4444-9600-bb45ab746a13
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_ReFrEq1JGq16sW", "request_duration_ms":
+        282}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: POST
+    uri: https://api.stripe.com/v1/payment_methods/pm_card_threeDSecure2Required/attach
+  response:
+    body:
+      string: "{\n  \"id\": \"pm_1F55G2FWLfbqapoHeUryq5Wl\",\n  \"object\": \"payment_method\",\n
+        \ \"billing_details\": {\n    \"address\": {\n      \"city\": null,\n      \"country\":
+        null,\n      \"line1\": null,\n      \"line2\": null,\n      \"postal_code\":
+        null,\n      \"state\": null\n    },\n    \"email\": null,\n    \"name\":
+        null,\n    \"phone\": null\n  },\n  \"card\": {\n    \"brand\": \"visa\",\n
+        \   \"checks\": {\n      \"address_line1_check\": null,\n      \"address_postal_code_check\":
+        null,\n      \"cvc_check\": null\n    },\n    \"country\": null,\n    \"exp_month\":
+        8,\n    \"exp_year\": 2020,\n    \"fingerprint\": \"SYKi0niCGBrPVd6A\",\n
+        \   \"funding\": \"credit\",\n    \"generated_from\": null,\n    \"last4\":
+        \"3220\",\n    \"three_d_secure_usage\": {\n      \"supported\": true\n    },\n
+        \   \"wallet\": null\n  },\n  \"created\": 1565246274,\n  \"customer\": \"cus_FaFltzn4xjAgHB\",\n
+        \ \"livemode\": false,\n  \"metadata\": {\n  },\n  \"type\": \"card\"\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '849'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:54 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      idempotency-key:
+      - ed2a85dd-a5f6-4444-9600-bb45ab746a13
+      original-request:
+      - req_zeSal8X8wNdeTy
+      request-id:
+      - req_zeSal8X8wNdeTy
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: customer=cus_FaFltzn4xjAgHB&default_payment_method=pm_1F55G2FWLfbqapoHeUryq5Wl&items[0][plan]=plan_FZrbLVsKMsw3IL&expand[0]=latest_invoice.payment_intent
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '153'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Idempotency-Key:
+      - d524890d-bb43-41bc-a10d-1ce97ea6cb95
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_zeSal8X8wNdeTy", "request_duration_ms":
+        574}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: POST
+    uri: https://api.stripe.com/v1/subscriptions
+  response:
+    body:
+      string: "{\n  \"id\": \"sub_FaFlnFQnDESbjH\",\n  \"object\": \"subscription\",\n
+        \ \"application_fee_percent\": null,\n  \"billing\": \"charge_automatically\",\n
+        \ \"billing_cycle_anchor\": 1565246274,\n  \"billing_thresholds\": null,\n
+        \ \"cancel_at\": null,\n  \"cancel_at_period_end\": false,\n  \"canceled_at\":
+        null,\n  \"collection_method\": \"charge_automatically\",\n  \"created\":
+        1565246274,\n  \"current_period_end\": 1567924674,\n  \"current_period_start\":
+        1565246274,\n  \"customer\": \"cus_FaFltzn4xjAgHB\",\n  \"days_until_due\":
+        null,\n  \"default_payment_method\": \"pm_1F55G2FWLfbqapoHeUryq5Wl\",\n  \"default_source\":
+        null,\n  \"default_tax_rates\": [\n\n  ],\n  \"discount\": null,\n  \"ended_at\":
+        null,\n  \"items\": {\n    \"object\": \"list\",\n    \"data\": [\n      {\n
+        \       \"id\": \"si_FaFlB9DnjrHofB\",\n        \"object\": \"subscription_item\",\n
+        \       \"billing_thresholds\": null,\n        \"created\": 1565246275,\n
+        \       \"metadata\": {\n        },\n        \"plan\": {\n          \"id\":
+        \"plan_FZrbLVsKMsw3IL\",\n          \"object\": \"plan\",\n          \"active\":
+        true,\n          \"aggregate_usage\": null,\n          \"amount\": 999,\n
+        \         \"billing_scheme\": \"per_unit\",\n          \"created\": 1565156402,\n
+        \         \"currency\": \"usd\",\n          \"interval\": \"month\",\n          \"interval_count\":
+        1,\n          \"livemode\": false,\n          \"metadata\": {\n          },\n
+        \         \"nickname\": \"Userland Service: paid\",\n          \"product\":
+        \"userland\",\n          \"tiers\": null,\n          \"tiers_mode\": null,\n
+        \         \"transform_usage\": null,\n          \"trial_period_days\": null,\n
+        \         \"usage_type\": \"licensed\"\n        },\n        \"quantity\":
+        1,\n        \"subscription\": \"sub_FaFlnFQnDESbjH\",\n        \"tax_rates\":
+        [\n\n        ]\n      }\n    ],\n    \"has_more\": false,\n    \"total_count\":
+        1,\n    \"url\": \"/v1/subscription_items?subscription=sub_FaFlnFQnDESbjH\"\n
+        \ },\n  \"latest_invoice\": {\n    \"id\": \"in_1F55G2FWLfbqapoH36PmuFG3\",\n
+        \   \"object\": \"invoice\",\n    \"account_country\": \"US\",\n    \"account_name\":
+        \"ORB.HOUSE, LLC\",\n    \"amount_due\": 999,\n    \"amount_paid\": 0,\n    \"amount_remaining\":
+        999,\n    \"application_fee_amount\": null,\n    \"attempt_count\": 0,\n    \"attempted\":
+        true,\n    \"auto_advance\": true,\n    \"billing\": \"charge_automatically\",\n
+        \   \"billing_reason\": \"subscription_create\",\n    \"charge\": null,\n
+        \   \"collection_method\": \"charge_automatically\",\n    \"created\": 1565246274,\n
+        \   \"currency\": \"usd\",\n    \"custom_fields\": null,\n    \"customer\":
+        \"cus_FaFltzn4xjAgHB\",\n    \"customer_address\": null,\n    \"customer_email\":
+        \"user@userland.tech\",\n    \"customer_name\": null,\n    \"customer_phone\":
+        null,\n    \"customer_shipping\": null,\n    \"customer_tax_exempt\": \"none\",\n
+        \   \"customer_tax_ids\": [\n\n    ],\n    \"default_payment_method\": null,\n
+        \   \"default_source\": null,\n    \"default_tax_rates\": [\n\n    ],\n    \"description\":
+        null,\n    \"discount\": null,\n    \"due_date\": null,\n    \"ending_balance\":
+        0,\n    \"footer\": null,\n    \"hosted_invoice_url\": \"https://pay.stripe.com/invoice/invst_AFj0Zxt9jadOndkPV6XHdl0Tfd\",\n
+        \   \"invoice_pdf\": \"https://pay.stripe.com/invoice/invst_AFj0Zxt9jadOndkPV6XHdl0Tfd/pdf\",\n
+        \   \"lines\": {\n      \"object\": \"list\",\n      \"data\": [\n        {\n
+        \         \"id\": \"sli_3ee49a573b7471\",\n          \"object\": \"line_item\",\n
+        \         \"amount\": 999,\n          \"currency\": \"usd\",\n          \"description\":
+        \"1 \xD7 Userland.tech (at $9.99 / month)\",\n          \"discountable\":
+        true,\n          \"livemode\": false,\n          \"metadata\": {\n          },\n
+        \         \"period\": {\n            \"end\": 1567924674,\n            \"start\":
+        1565246274\n          },\n          \"plan\": {\n            \"id\": \"plan_FZrbLVsKMsw3IL\",\n
+        \           \"object\": \"plan\",\n            \"active\": true,\n            \"aggregate_usage\":
+        null,\n            \"amount\": 999,\n            \"billing_scheme\": \"per_unit\",\n
+        \           \"created\": 1565156402,\n            \"currency\": \"usd\",\n
+        \           \"interval\": \"month\",\n            \"interval_count\": 1,\n
+        \           \"livemode\": false,\n            \"metadata\": {\n            },\n
+        \           \"nickname\": \"Userland Service: paid\",\n            \"product\":
+        \"userland\",\n            \"tiers\": null,\n            \"tiers_mode\": null,\n
+        \           \"transform_usage\": null,\n            \"trial_period_days\":
+        null,\n            \"usage_type\": \"licensed\"\n          },\n          \"proration\":
+        false,\n          \"quantity\": 1,\n          \"subscription\": \"sub_FaFlnFQnDESbjH\",\n
+        \         \"subscription_item\": \"si_FaFlB9DnjrHofB\",\n          \"tax_amounts\":
+        [\n\n          ],\n          \"tax_rates\": [\n\n          ],\n          \"type\":
+        \"subscription\"\n        }\n      ],\n      \"has_more\": false,\n      \"total_count\":
+        1,\n      \"url\": \"/v1/invoices/in_1F55G2FWLfbqapoH36PmuFG3/lines\"\n    },\n
+        \   \"livemode\": false,\n    \"metadata\": {\n    },\n    \"next_payment_attempt\":
+        null,\n    \"number\": \"28997AF5-0001\",\n    \"paid\": false,\n    \"payment_intent\":
+        {\n      \"id\": \"pi_1F55G2FWLfbqapoHpEGw9Rw7\",\n      \"object\": \"payment_intent\",\n
+        \     \"amount\": 999,\n      \"amount_capturable\": 0,\n      \"amount_received\":
+        0,\n      \"application\": null,\n      \"application_fee_amount\": null,\n
+        \     \"canceled_at\": null,\n      \"cancellation_reason\": null,\n      \"capture_method\":
+        \"automatic\",\n      \"charges\": {\n        \"object\": \"list\",\n        \"data\":
+        [\n\n        ],\n        \"has_more\": false,\n        \"total_count\": 0,\n
+        \       \"url\": \"/v1/charges?payment_intent=pi_1F55G2FWLfbqapoHpEGw9Rw7\"\n
+        \     },\n      \"client_secret\": \"pi_1F55G2FWLfbqapoHpEGw9Rw7_secret_DX0HATaVk6x0ofmmf3uhOCvwK\",\n
+        \     \"confirmation_method\": \"automatic\",\n      \"created\": 1565246274,\n
+        \     \"currency\": \"usd\",\n      \"customer\": \"cus_FaFltzn4xjAgHB\",\n
+        \     \"description\": \"Payment for invoice 28997AF5-0001\",\n      \"invoice\":
+        \"in_1F55G2FWLfbqapoH36PmuFG3\",\n      \"last_payment_error\": null,\n      \"livemode\":
+        false,\n      \"metadata\": {\n      },\n      \"next_action\": {\n        \"type\":
+        \"use_stripe_sdk\",\n        \"use_stripe_sdk\": {\n          \"type\": \"stripe_3ds2_fingerprint\",\n
+        \         \"three_d_secure_2_source\": \"src_1F55G2FWLfbqapoHIlFzB0qp\",\n
+        \         \"directory_server_name\": \"visa\",\n          \"server_transaction_id\":
+        \"9bbad0b3-8af6-4fa0-bc45-b9c672dbb010\",\n          \"three_ds_method_url\":
+        \"\",\n          \"three_ds_optimizations\": \"\",\n          \"directory_server_encryption\":
+        {\n            \"directory_server_id\": \"A000000003\",\n            \"algorithm\":
+        \"RSA\",\n            \"certificate\": \"-----BEGIN CERTIFICATE-----\\nMIIFrjCCBJagAwIBAgIQB2rJmsHVwbONd36WP9QPrTANBgkqhkiG9w0BAQsFADBx\\nMQswCQYDVQQGEwJVUzENMAsGA1UEChMEVklTQTEvMC0GA1UECxMmVmlzYSBJbnRl\\ncm5hdGlvbmFsIFNlcnZpY2UgQXNzb2NpYXRpb24xIjAgBgNVBAMTGVZpc2EgZUNv\\nbW1lcmNlIElzc3VpbmcgQ0EwHhcNMTcxMTAyMjIyMzEwWhcNMjAxMTAzMDAyMzEw\\nWjCBoTEYMBYGA1UEBxMPSGlnaGxhbmRzIFJhbmNoMREwDwYDVQQIEwhDb2xvcmFk\\nbzELMAkGA1UEBhMCVVMxDTALBgNVBAoTBFZJU0ExLzAtBgNVBAsTJlZpc2EgSW50\\nZXJuYXRpb25hbCBTZXJ2aWNlIEFzc29jaWF0aW9uMSUwIwYDVQQDExwzZHMyLnJz\\nYS5lbmNyeXB0aW9uLnZpc2EuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB\\nCgKCAQEAst+HGfPPsX3p6HHEQ9YzourlQj16Nscmm13Cp7cZe4dZB2oWnJqZ7oh/\\npEoEoOAxBw1x4NFgXKTKdHAeu3VBNVw8SwMTdIC+X16VV+3VIyPbUvJXFp3QoR8W\\nUwPB3F1Lb9SMFNS95boYDZKIOdPW0cP1dRi7pFugsBUZDCP/H3nFfBFHMCBoga+P\\n3AHGj5y8RVpv0hS9jaIsYjX+i58B61OGCB7D0AiADNZJuFzw2+xpNkt6NJJF66FP\\nO8qIh8xR2xGVDf7TtCbss/CugLRgSqKab9YRB8/TBTcy5bxj6O8HD6aL2zGLcMY9\\ndCobXxCodLEtMjJdVL8N+iZrsI2gtwIDAQABo4ICDzCCAgswEwYDVR0lBAwwCgYI\\nKwYBBQUHAwEwZQYIKwYBBQUHAQEEWTBXMCUGCCsGAQUFBzABhhlodHRwOi8vb2Nz\\ncC52aXNhLmNvbS9vY3NwMC4GCCsGAQUFBzAChiJodHRwOi8vZW5yb2xsLnZpc2Fj\\nYS5jb20vZWNvbW0uY2VyMB8GA1UdIwQYMBaAFN/DKlUuL0I6ekCdkqD3R3nXj4eK\\nMAwGA1UdEwEB/wQCMAAwgcoGA1UdHwSBwjCBvzAooCagJIYiaHR0cDovL0Vucm9s\\nbC52aXNhY2EuY29tL2VDb21tLmNybDCBkqCBj6CBjIaBiWxkYXA6Ly9FbnJvbGwu\\ndmlzYWNhLmNvbTozODkvY249VmlzYSBlQ29tbWVyY2UgSXNzdWluZyBDQSxjPVVT\\nLG91PVZpc2EgSW50ZXJuYXRpb25hbCBTZXJ2aWNlIEFzc29jaWF0aW9uLG89VklT\\nQT9jZXJ0aWZpY2F0ZVJldm9jYXRpb25MaXN0MA4GA1UdDwEB/wQEAwIFoDAnBgNV\\nHREEIDAeghwzZHMyLnJzYS5lbmNyeXB0aW9uLnZpc2EuY29tMB0GA1UdDgQWBBT8\\nm2pDtUtY13f/3NCOmexHavP5zDA5BgNVHSAEMjAwMC4GBWeBAwEBMCUwIwYIKwYB\\nBQUHAgEWF2h0dHA6Ly93d3cudmlzYS5jb20vcGtpMA0GCSqGSIb3DQEBCwUAA4IB\\nAQCcCUhU7KnHUDuLXqwSuzC8lWWCcEqPRgPPzY3mgBUg9ya0p+v7QF2BG77tpygK\\nE2yDPkOE8trzYeMi7TCuvKgZvUXDSOka8SId9QleMBlo2pzNi0vKKBG8+E7qmGaf\\netQHVaoFvhg24/e7y8q89VYNKfLXn8TWMUOJdTQoNP+4bHcCnBvWWUcI2LlyEog1\\n2FDSG8hgP3cpw+0B2Hace9BQGR7ZgTIJAANEHZ54QGOYdxZEcDS5IEpKZlN8INs/\\nNKJyCkqP09VA4NO/WHaGFAXtgoLmjlA9Kal+4ieJPKijVDxcHVv/uPSfVQJ0/vCa\\nudJGOXV9q4VteupwLxfOGW8w\\n-----END
+        CERTIFICATE-----\\n\",\n            \"root_certificate_authorities\": [\n
+        \             \"-----BEGIN CERTIFICATE-----\\nMIIDojCCAoqgAwIBAgIQE4Y1TR0/BvLB+WUF1ZAcYjANBgkqhkiG9w0BAQUFADBr\\nMQswCQYDVQQGEwJVUzENMAsGA1UEChMEVklTQTEvMC0GA1UECxMmVmlzYSBJbnRl\\ncm5hdGlvbmFsIFNlcnZpY2UgQXNzb2NpYXRpb24xHDAaBgNVBAMTE1Zpc2EgZUNv\\nbW1lcmNlIFJvb3QwHhcNMDIwNjI2MDIxODM2WhcNMjIwNjI0MDAxNjEyWjBrMQsw\\nCQYDVQQGEwJVUzENMAsGA1UEChMEVklTQTEvMC0GA1UECxMmVmlzYSBJbnRlcm5h\\ndGlvbmFsIFNlcnZpY2UgQXNzb2NpYXRpb24xHDAaBgNVBAMTE1Zpc2EgZUNvbW1l\\ncmNlIFJvb3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvV95WHm6h\\n2mCxlCfLF9sHP4CFT8icttD0b0/Pmdjh28JIXDqsOTPHH2qLJj0rNfVIsZHBAk4E\\nlpF7sDPwsRROEW+1QK8bRaVK7362rPKgH1g/EkZgPI2h4H3PVz4zHvtH8aoVlwdV\\nZqW1LS7YgFmypw23RuwhY/81q6UCzyr0TP579ZRdhE2o8mCP2w4lPJ9zcc+U30rq\\n299yOIzzlr3xF7zSujtFWsan9sYXiwGd/BmoKoMWuDpI/k4+oKsGGelT84ATB+0t\\nvz8KPFUgOSwsAGl0lUq8ILKpeeUYiZGo3BxN77t+Nwtd/jmliFKMAGzsGHxBvfaL\\ndXe6YJ2E5/4tAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQD\\nAgEGMB0GA1UdDgQWBBQVOIMPPyw/cDMezUb+B4wg4NfDtzANBgkqhkiG9w0BAQUF\\nAAOCAQEAX/FBfXxcCLkr4NWSR/pnXKUTwwMhmytMiUbPWU3J/qVAtmPN3XEolWcR\\nzCSs00Rsca4BIGsDoo8Ytyk6feUWYFN4PMCvFYP3j1IzJL1kk5fui/fbGKhtcbP3\\nLBfQdCVp9/5rPJS+TUtBjE7ic9DjkCJzQ83z7+pzzkWKsKZJ/0x9nXGIxHYdkFsd\\n7v3M9+79YKWxehZx0RbQfBI8bGmX265fOZpwLwU8GUYEmSA20GBuYQa7FkKMcPcw\\n++DbZqMAAb3mLNqRX6BGi01qnD093QVG/na/oAo85ADmJ7f/hC3euiInlhBx6yLt\\n398znM/jra6O1I7mT1GvFpLgXPYHDw==\\n-----END
+        CERTIFICATE-----\\n\"\n            ]\n          }\n        }\n      },\n      \"on_behalf_of\":
+        null,\n      \"payment_method\": \"pm_1F55G2FWLfbqapoHeUryq5Wl\",\n      \"payment_method_options\":
+        {\n        \"card\": {\n          \"request_three_d_secure\": \"automatic\"\n
+        \       }\n      },\n      \"payment_method_types\": [\n        \"card\"\n
+        \     ],\n      \"receipt_email\": null,\n      \"review\": null,\n      \"setup_future_usage\":
+        \"off_session\",\n      \"shipping\": null,\n      \"source\": null,\n      \"statement_descriptor\":
+        null,\n      \"statement_descriptor_suffix\": null,\n      \"status\": \"requires_action\",\n
+        \     \"transfer_data\": null,\n      \"transfer_group\": null\n    },\n    \"period_end\":
+        1565246274,\n    \"period_start\": 1565246274,\n    \"post_payment_credit_notes_amount\":
+        0,\n    \"pre_payment_credit_notes_amount\": 0,\n    \"receipt_number\": null,\n
+        \   \"starting_balance\": 0,\n    \"statement_descriptor\": null,\n    \"status\":
+        \"open\",\n    \"status_transitions\": {\n      \"finalized_at\": 1565246274,\n
+        \     \"marked_uncollectible_at\": null,\n      \"paid_at\": null,\n      \"voided_at\":
+        null\n    },\n    \"subscription\": \"sub_FaFlnFQnDESbjH\",\n    \"subtotal\":
+        999,\n    \"tax\": null,\n    \"tax_percent\": null,\n    \"total\": 999,\n
+        \   \"total_tax_amounts\": [\n\n    ],\n    \"webhooks_delivered_at\": null\n
+        \ },\n  \"livemode\": false,\n  \"metadata\": {\n  },\n  \"pending_setup_intent\":
+        null,\n  \"plan\": {\n    \"id\": \"plan_FZrbLVsKMsw3IL\",\n    \"object\":
+        \"plan\",\n    \"active\": true,\n    \"aggregate_usage\": null,\n    \"amount\":
+        999,\n    \"billing_scheme\": \"per_unit\",\n    \"created\": 1565156402,\n
+        \   \"currency\": \"usd\",\n    \"interval\": \"month\",\n    \"interval_count\":
+        1,\n    \"livemode\": false,\n    \"metadata\": {\n    },\n    \"nickname\":
+        \"Userland Service: paid\",\n    \"product\": \"userland\",\n    \"tiers\":
+        null,\n    \"tiers_mode\": null,\n    \"transform_usage\": null,\n    \"trial_period_days\":
+        null,\n    \"usage_type\": \"licensed\"\n  },\n  \"quantity\": 1,\n  \"schedule\":
+        null,\n  \"start\": 1565246274,\n  \"start_date\": 1565246274,\n  \"status\":
+        \"incomplete\",\n  \"tax_percent\": null,\n  \"trial_end\": null,\n  \"trial_start\":
+        null\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '11681'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:55 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      idempotency-key:
+      - d524890d-bb43-41bc-a10d-1ce97ea6cb95
+      original-request:
+      - req_JwIfh7p5CO4SXS
+      request-id:
+      - req_JwIfh7p5CO4SXS
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+version: 1

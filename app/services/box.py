@@ -81,8 +81,6 @@ class BoxCreationService:
     def check_config_permissions(self) -> None:
         if self.config.user != self.current_user:
             raise AccessDenied("You do not own this config")
-        elif self.config.user == self.current_user:
-            pass
 
     def over_box_limit(self) -> bool:
         num_boxes = self.current_user.boxes.count()
@@ -94,17 +92,20 @@ class BoxCreationService:
         """Create a box by scheduling an SSH container into the Nomad cluster"""
 
         stripped_ssh_key = "".join(i for i in self.ssh_key if 31 < ord(i) < 127)
+        box_name = "box-" + (
+            self.config.name if self.config.name else str(self.config.id)
+        )
         new_job = render_template(
             "box.j2.json",
             ssh_key=stripped_ssh_key,
-            box_name="box-" + str(self.config.id),
+            box_name=box_name,
             bandwidth=str(self.current_user.limits().bandwidth),
             time_limit=self.session_length,
         )
         self.nomad_client.jobs.request(
             data=new_job, method="post", headers={"Content-Type": "application/json"}
         )
-        return "box-client-box-" + str(self.config.id)
+        return "box-client-" + box_name
 
     def get_box_details(self, job_id: str) -> Tuple[str, str]:
         """Get details of ssh container"""

@@ -1,9 +1,12 @@
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import types, DateTime
+from sqlalchemy.orm import validates
 from werkzeug import check_password_hash, generate_password_hash
 from app import db
+from app.utils.errors import UserError
+from app.utils.general import memoized
 from sqlalchemy.dialects.postgresql import UUID
-from typing import NamedTuple
+from typing import NamedTuple, Union
 
 
 class UserLimit(NamedTuple):
@@ -12,6 +15,10 @@ class UserLimit(NamedTuple):
     time_limit: int
     forwards: int
     reserved_config: int
+
+
+class AsyncJob(NamedTuple):
+    id: Union[str, int]
 
 
 class Config(db.Model):  # type: ignore
@@ -34,6 +41,15 @@ class Plan(db.Model):  # type: ignore
     name = db.Column(db.String, index=True, nullable=False, unique=True)
     stripe_id = db.Column(db.String, index=True, unique=True)
     users = db.relationship("User")
+
+    @staticmethod
+    @memoized
+    def paid_plans():
+        return {p.name for p in Plan.query.filter(Plan.cost != 0).all()}
+
+    @staticmethod
+    def admin():
+        return Plan.query.filter_by(name="admin").first()
 
     @staticmethod
     def paid():
@@ -71,6 +87,8 @@ class User(db.Model):  # type: ignore
     password_hash = db.Column(db.String(128))
     uuid = db.Column(UUID(as_uuid=True), nullable=False, unique=True)
     plan_id = db.Column(db.Integer, db.ForeignKey("plan.id", name="user_plan_fk"))
+    stripe_id = db.Column(db.String(32), index=True, unique=True, nullable=True)
+    stripe_payment_method = db.Column(db.String(32), nullable=True)
     configs = db.relationship(
         "Config", back_populates="user", lazy="dynamic", cascade="all, delete"
     )
@@ -92,6 +110,13 @@ class User(db.Model):  # type: ignore
     @property
     def tier(self):
         return self.plan.name
+
+    @validates("plan")
+    def validates_stripe_id_with_plan(self, _, plan):
+        if self.stripe_id is None and plan.name in Plan.paid_plans():
+            raise UserError(detail="Plan cannot be changed unless Stripe is configured")
+
+        return plan
 
 
 class Box(db.Model):  # type: ignore

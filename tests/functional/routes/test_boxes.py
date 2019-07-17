@@ -1,8 +1,9 @@
 import pytest
 from dpath.util import values
 from nomad.api.exceptions import BaseNomadException
-from app.models import Box
+from app.models import Box, Config
 from app.services.box import BoxCreationService, BoxDeletionService
+from app.services.config import ConfigCreationService
 from app.utils.errors import BoxError
 from tests.factories.user import UserFactory
 from tests.factories import config, box
@@ -52,7 +53,14 @@ class TestBoxes(object):
         assert res.status_code == 404
 
     @pytest.mark.vcr()
-    def test_box_open_without_config(self, client, current_user, session):
+    # Because we use the id in the cassette match, we need it to be predictable,
+    # there's only one config object in this test, so we can just always have
+    # any config report it's id as 1000
+    @mock.patch.object(Config, "id", return_value=1000)
+    @mock.patch.object(Config, "name", name="aboxwithnoname")
+    def test_box_open_without_config(
+        self, config_creator, client, current_user, session
+    ):
         """User can open a box without providing a config"""
 
         res = client.post(
@@ -73,7 +81,7 @@ class TestBoxes(object):
     def test_box_open_with_config(self, client, current_user, session):
         """User can open a box when providing a config they own"""
 
-        conf = config.ConfigFactory(user=current_user)
+        conf = config.ConfigFactory(user=current_user, id=1001, name="aboxname")
         session.add(conf)
         session.flush()
 
@@ -98,7 +106,7 @@ class TestBoxes(object):
     def test_box_open_unowned_config(self, client, current_user, session):
         """User can not open a box if they dont own the config"""
 
-        conf = config.ConfigFactory()
+        conf = config.ConfigFactory(id=1002, name="aboxwithadifferentname")
         session.add(conf)
         session.flush()
 
@@ -122,7 +130,7 @@ class TestBoxes(object):
     def test_box_close_owned(self, client, session, current_user):
         """User can close a box"""
 
-        conf = config.ConfigFactory(user=current_user)
+        conf = config.ConfigFactory(user=current_user, id=1003, name="aboxname2")
         session.add(conf)
         session.flush()
         test_box = BoxCreationService(

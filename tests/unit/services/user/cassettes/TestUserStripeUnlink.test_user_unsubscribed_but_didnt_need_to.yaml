@@ -1,0 +1,224 @@
+interactions:
+- request:
+    body: email=user%40userland.tech&description=ULA+TEST+2019-08-08+06%3A37%3A42.358040+None
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '83'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Idempotency-Key:
+      - 330751c1-d458-464f-a730-2983fbd90108
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_GoMTSqaTFm4NgA", "request_duration_ms":
+        760}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: POST
+    uri: https://api.stripe.com/v1/customers
+  response:
+    body:
+      string: "{\n  \"id\": \"cus_FaFlEP0BVFFmfo\",\n  \"object\": \"customer\",\n
+        \ \"account_balance\": 0,\n  \"address\": null,\n  \"balance\": 0,\n  \"created\":
+        1565246262,\n  \"currency\": null,\n  \"default_source\": null,\n  \"delinquent\":
+        false,\n  \"description\": \"ULA TEST 2019-08-08 06:37:42.358040 None\",\n
+        \ \"discount\": null,\n  \"email\": \"user@userland.tech\",\n  \"invoice_prefix\":
+        \"2C054C55\",\n  \"invoice_settings\": {\n    \"custom_fields\": null,\n    \"default_payment_method\":
+        null,\n    \"footer\": null\n  },\n  \"livemode\": false,\n  \"metadata\":
+        {\n  },\n  \"name\": null,\n  \"phone\": null,\n  \"preferred_locales\": [\n\n
+        \ ],\n  \"shipping\": null,\n  \"sources\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n\n    ],\n    \"has_more\": false,\n    \"total_count\":
+        0,\n    \"url\": \"/v1/customers/cus_FaFlEP0BVFFmfo/sources\"\n  },\n  \"subscriptions\":
+        {\n    \"object\": \"list\",\n    \"data\": [\n\n    ],\n    \"has_more\":
+        false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_FaFlEP0BVFFmfo/subscriptions\"\n
+        \ },\n  \"tax_exempt\": \"none\",\n  \"tax_ids\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n\n    ],\n    \"has_more\": false,\n    \"total_count\":
+        0,\n    \"url\": \"/v1/customers/cus_FaFlEP0BVFFmfo/tax_ids\"\n  },\n  \"tax_info\":
+        null,\n  \"tax_info_verification\": null\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1171'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:42 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      idempotency-key:
+      - 330751c1-d458-464f-a730-2983fbd90108
+      original-request:
+      - req_YgCMeM6hgM4jj6
+      request-id:
+      - req_YgCMeM6hgM4jj6
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: customer=cus_FaFlEP0BVFFmfo
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '27'
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Idempotency-Key:
+      - 172f3b0f-a7a5-4a9e-b537-8b72b1a18bbd
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_YgCMeM6hgM4jj6", "request_duration_ms":
+        255}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: POST
+    uri: https://api.stripe.com/v1/payment_methods/pm_card_visa/attach
+  response:
+    body:
+      string: "{\n  \"id\": \"pm_1F55FqFWLfbqapoHFaCfGjvC\",\n  \"object\": \"payment_method\",\n
+        \ \"billing_details\": {\n    \"address\": {\n      \"city\": null,\n      \"country\":
+        null,\n      \"line1\": null,\n      \"line2\": null,\n      \"postal_code\":
+        null,\n      \"state\": null\n    },\n    \"email\": null,\n    \"name\":
+        null,\n    \"phone\": null\n  },\n  \"card\": {\n    \"brand\": \"visa\",\n
+        \   \"checks\": {\n      \"address_line1_check\": null,\n      \"address_postal_code_check\":
+        null,\n      \"cvc_check\": null\n    },\n    \"country\": \"US\",\n    \"exp_month\":
+        8,\n    \"exp_year\": 2020,\n    \"fingerprint\": \"5WF0F0bdzuufzLej\",\n
+        \   \"funding\": \"credit\",\n    \"generated_from\": null,\n    \"last4\":
+        \"4242\",\n    \"three_d_secure_usage\": {\n      \"supported\": true\n    },\n
+        \   \"wallet\": null\n  },\n  \"created\": 1565246262,\n  \"customer\": \"cus_FaFlEP0BVFFmfo\",\n
+        \ \"livemode\": false,\n  \"metadata\": {\n  },\n  \"type\": \"card\"\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '849'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:43 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      idempotency-key:
+      - 172f3b0f-a7a5-4a9e-b537-8b72b1a18bbd
+      original-request:
+      - req_Is8QyzZKCaw1u2
+      request-id:
+      - req_Is8QyzZKCaw1u2
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.32.1
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_Is8QyzZKCaw1u2", "request_duration_ms":
+        683}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.32.1", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.7.3", "platform": "Linux-4.9.125-linuxkit-x86_64-with-debian-9.9",
+        "uname": "Linux d22c79fa8058 4.9.125-linuxkit #1 SMP Fri Sep 7 08:20:28 UTC
+        2018 x86_64 "}'
+      authorization:
+      - NOKEYFORYOU
+    method: GET
+    uri: https://api.stripe.com/v1/subscriptions?plan=plan_FZrbLVsKMsw3IL&customer=cus_FaFlEP0BVFFmfo&status=active
+  response:
+    body:
+      string: "{\n  \"object\": \"list\",\n  \"data\": [\n\n  ],\n  \"has_more\":
+        false,\n  \"url\": \"/v1/subscriptions\"\n}\n"
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '92'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:37:43 GMT
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains; preload
+      access-control-allow-credentials:
+      - 'true'
+      access-control-allow-methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      access-control-allow-origin:
+      - '*'
+      access-control-expose-headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      access-control-max-age:
+      - '300'
+      cache-control:
+      - no-cache, no-store
+      request-id:
+      - req_l1duFU9CEzuO99
+      stripe-version:
+      - '2019-03-14'
+    status:
+      code: 200
+      message: OK
+version: 1

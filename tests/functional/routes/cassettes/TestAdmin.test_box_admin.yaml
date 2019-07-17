@@ -1,0 +1,306 @@
+interactions:
+- request:
+    body: "{\n  \"Job\": {\n    \"Affinities\": null,\n    \"AllAtOnce\": false,\n
+      \   \"Constraints\": null,\n    \"CreateIndex\": 81,\n    \"Datacenters\": [\n
+      \     \"city\"\n    ],\n    \"Dispatched\": false,\n    \"ID\": \"box-client-box-testtunnelsubdomain\",\n
+      \   \"JobModifyIndex\": 81,\n    \"Meta\": null,\n    \"Migrate\": null,\n    \"ModifyIndex\":
+      83,\n    \"Name\": \"box-client-box-testtunnelsubdomain\",\n    \"Namespace\":
+      \"default\",\n    \"ParameterizedJob\": null,\n    \"ParentID\": \"\",\n    \"Payload\":
+      null,\n    \"Periodic\": null,\n    \"Priority\": 50,\n    \"Region\": \"global\",\n
+      \   \"Reschedule\": null,\n    \"Spreads\": null,\n    \"Stable\": false,\n
+      \   \"Status\": null,\n    \"StatusDescription\": \"\",\n    \"Stop\": false,\n
+      \   \"SubmitTime\": 1559239760878108100,\n    \"TaskGroups\": [\n      {\n        \"Affinities\":
+      null,\n        \"Constraints\": null,\n        \"Count\": 1,\n        \"EphemeralDisk\":
+      {\n          \"Migrate\": false,\n          \"SizeMB\": 300,\n          \"Sticky\":
+      false\n        },\n        \"Meta\": null,\n        \"Migrate\": {\n          \"HealthCheck\":
+      \"checks\",\n          \"HealthyDeadline\": 300000000000,\n          \"MaxParallel\":
+      1,\n          \"MinHealthyTime\": 10000000000\n        },\n        \"Name\":
+      \"userland\",\n        \"ReschedulePolicy\": {\n          \"Attempts\": 0,\n
+      \         \"Delay\": 30000000000,\n          \"DelayFunction\": \"exponential\",\n
+      \         \"Interval\": 0,\n          \"MaxDelay\": 3600000000000,\n          \"Unlimited\":
+      true\n        },\n        \"RestartPolicy\": {\n          \"Attempts\": 2,\n
+      \         \"Delay\": 15000000000,\n          \"Interval\": 1800000000000,\n
+      \         \"Mode\": \"fail\"\n        },\n        \"Spreads\": null,\n        \"Tasks\":
+      [\n          {\n            \"Affinities\": null,\n            \"Artifacts\":
+      null,\n            \"Config\": {\n              \"image\": \"cypherpunkarmory/box:develop\",\n
+      \             \"labels\": [\n                {\n                  \"io.userland.box\":
+      \"box-testtunnelsubdomain\"\n                }\n              ],\n              \"port_map\":
+      [\n                {\n                  \"ssh\": 22\n                }\n              ]\n
+      \           },\n            \"Constraints\": null,\n            \"DispatchPayload\":
+      null,\n            \"Driver\": \"docker\",\n            \"Env\": {\n              \"BANDWIDTH\":
+      \"100000\",\n              \"SSH_KEY\": \"i-am-a-lousy-key\",\n              \"TIME_LIMIT\":\"30\"\n
+      \           },\n            \"KillSignal\": \"\",\n            \"KillTimeout\":
+      5000000000,\n            \"Leader\": false,\n            \"LogConfig\": {\n
+      \             \"MaxFileSizeMB\": 10,\n              \"MaxFiles\": 10\n            },\n
+      \           \"Meta\": null,\n            \"Name\": \"box\",\n            \"Resources\":
+      {\n              \"CPU\": 200,\n              \"Devices\": null,\n              \"DiskMB\":
+      0,\n              \"IOPS\": 0,\n              \"MemoryMB\": 200,\n              \"Networks\":
+      [\n                {\n                  \"CIDR\": \"\",\n                  \"Device\":
+      \"\",\n                  \"DynamicPorts\": [\n                    {\n                      \"Label\":
+      \"ssh\",\n                      \"Value\": 0\n                    }\n                  ],\n
+      \                 \"IP\": \"\",\n                  \"MBits\": 1,\n                  \"ReservedPorts\":
+      null\n                }\n              ]\n            },\n            \"Services\":
+      [\n              {\n    \"AddressMode\": \"auto\",\n    \"CanaryTags\": null,\n
+      \   \"CheckRestart\": null,\n    \"Checks\": [\n        {\n        \"AddressMode\":
+      \"driver\",\n        \"Args\": null,\n        \"CheckRestart\": null,\n        \"Command\":
+      \"\",\n        \"GRPCService\": \"\",\n        \"GRPCUseTLS\": false,\n        \"Header\":
+      null,\n        \"Id\": \"\",\n        \"InitialStatus\": \"\",\n        \"Interval\":
+      10000000000,\n        \"Method\": \"\",\n        \"Label\": \"ssh-box-testtunnelsubdomain-up\",\n
+      \       \"Path\": \"\",\n        \"PortLabel\": \"ssh\",\n        \"Protocol\":
+      \"\",\n        \"TLSSkipVerify\": false,\n        \"Timeout\": 2000000000,\n
+      \       \"Type\": \"tcp\"\n        }\n    ],\n    \"Id\": \"\",\n    \"Name\":
+      \"ssh-box-testtunnelsubdomain\",\n    \"PortLabel\": \"\"\n}\n            ],\n
+      \           \"ShutdownDelay\": 0,\n            \"Templates\": null,\n            \"User\":
+      \"\",\n            \"Vault\": null\n          }\n        ],\n        \"Update\":
+      null\n      }\n    ],\n    \"Type\": \"service\",\n    \"Update\": {\n      \"AutoRevert\":
+      false,\n      \"Canary\": 0,\n      \"HealthCheck\": \"\",\n      \"HealthyDeadline\":
+      0,\n      \"MaxParallel\": 0,\n      \"MinHealthyTime\": 0,\n      \"ProgressDeadline\":
+      0,\n      \"Stagger\": 0\n    },\n    \"VaultToken\": \"\",\n    \"Version\":
+      0\n  }\n}"
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4318'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - python-requests/2.22.0
+    method: POST
+    uri: http://nomad:4646/v1/jobs
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/0zLzwqCQBAH4Hf5nXfBMV11r9bBsnPnUWdDkFnQpT9E7x4EQdcPvhcON17aVThJ
+        p5M84HOXma92e3hUTV5LTc7yjshmMpB1dUG2cGMoQqCqKQcY/N9jHM5xmsPzh2VjcNJ41154khU+
+        8LKJQc9baqMmHhN8ZnDhVWe9bvDA+xMAAP//WR9Ye5oAAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '149'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:47:07 GMT
+      Vary:
+      - Accept-Encoding
+      X-Nomad-Index:
+      - '260'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.22.0
+    method: GET
+    uri: http://nomad:4646/v1/job/box-client-box-testtunnelsubdomain
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/4xWUXPaOhP9K519dvoBadJ+fqOQNrShZWLSO3duO53FXkCDLHmkNcXN8N/vrCxM
+        SMnMzUtsWbt7tOccLY8wXC6VUazIQ2pqrRMYaj3kryYnSJeoPSUwssazQ2W42zRyhEwTU9AO0sHV
+        /xMYI2NOhsl5SP+BXHEDPxIYK18h52squnSTMaSwsLuLXCsyfCGPTJ65Noa0rxeFLVEZSOCTXUxt
+        oZbN00JTYjzAOP163U/gC5b0X9PLXl+hnBQKWmKtGRKYocOSmJz6TcUnuzjUmqEjwwF82NVoi0X3
+        kZyyhcq7d6eskxakV70E7mmlrIEUVtouUEMCWeUIi66dGeNCHxueMXLtIQVXG6PMCg5LY/K5UxW3
+        2cKyrY5h9aJUPFfSgf7V9dXgzfW7wdur3uWbt5fver0E5ug3H52tK6HoHPfnmLa1YUj7CdxUayrJ
+        oR4rv4H0EaZq5ZCfwFa/afoe0kuplbHKN038tn9G2yHwEW4JNa9Ha8o3kEIu/z0kcbkZExZaGQo5
+        u78EprgTmrQmHaBNlYkR8fTHzftOE7Unp9EUIIR4kWStaWa1yhtBMmSmspKD9xIYk8bmpGpc+1Cb
+        PLafdpU1ZFgFRici/S3qED7F3SHD9QnwB6NVqVjcwK6WvtyTZ3R8Dsegw9G/epLjWKn/7rQrtpBz
+        LlFp2P+hMSH/Jd6HjtUS86esm6VaCRxV4kqy5k21JlfVZoOutK7538Lu0oK2pG0FCWhckG7TK/v6
+        0OrXC7uLbjxnwf2PBCrr+GeJVQj1fg3pYPC6t/+xP6vGw3XyzH5jp7bkxMY235CDBG7MVtC/H34Z
+        /zUZz28hhVYUYprs9ufnm78hBXWB5QVeaFv75mJDDSQwn0xvft5NppM5pHDZk0Z+VlpnamWk5WI6
+        eRed2ZrF30cC7ggLgRH9cGdXxz5OcfdBaTp4pN+qRJa8vD1zyPEaa9Vqa5fLxkcYzR4gHbR63Kqc
+        nrZmI5lFIV9nWatDEqpkNUR8If5lXVTBaDK+b8/TJorPjcFS5TPruN12J8RCGqhJ4BvqmiDtCXOT
+        WRsyfa9kbz8AJbelIkYLrkBkRi5CFfUVhSPvo1ixZgsJjNCga+a4OiqwvQr+jCharkW0z3ZHKx01
+        XJZi9wDy4/1sFGEcFx48ze+yjq/bSF8bPhGLoO7u4hOP9098R7y2sU4kzrel0lffpXEvzaDv8Crc
+        eGGe8DpOFuv4tOkzZ9nmNqpvfpdlG1V9I6eWTYe90+PgCbB5UwkYzqtgtQO2lwE9Ky/VOkokQ7au
+        ubC/TLyWpASVlUY+yvDBByMGrchA7WIfqiLc+Yf3CC52Co4bHmFYs72nLQmXh98gQSCh5OnIODcs
+        nk+I3p8TohfauhJdncRljKuVnEAcGU4wtxuK0/YbOR/u/t7+3wAAAP//ZLfw1ToJAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1076'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:47:07 GMT
+      Vary:
+      - Accept-Encoding
+      X-Nomad-Index:
+      - '261'
+      X-Nomad-Knownleader:
+      - 'true'
+      X-Nomad-Lastcontact:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.22.0
+    method: GET
+    uri: http://nomad:4646/v1/job/box-client-box-testtunnelsubdomain/allocations
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/4ySQW/cLhDFv8uczV+wa2zj279NU6VSqqpd9RLlMMA4RWHBApxmFeW7V157d6NW
+        qnqy+c2bB8Pj7gXee0ehXFE2yY3FxQA9QLXibwXLlKGHkYJ14WEuJMJCN8HSM/SbRpzIzu0JeiEb
+        uambbtNKLmXTSc4ruKLRx8P+jV+YvJ95donsH3uv/Lx5msKF7hKG7BbxC1zHZOgrZfOD7OTp5Hzr
+        HhKW8/J3wWsFH57Q31xBD63adNSJhuFWCMZJC9Z0tWB1Y4Z6GESrpIYKrqP38ec0nvugguN3aDVy
+        xRWzW7NlvO0U67bdwORWG2WMVA0SVPAp6qNcx2dmjnfL5t9CuZQpBPJ50jbu0YVFvDuMBD1kSk/O
+        rAbfKeXj3LyC22jdcHgbw0L+EsNnnEv/cIL/pkzJY7B3/B6WvjyimZstDTj5MtNo6TgRitZuahKM
+        t5qYUAaZQl4zSRwHYw1XUq369QSIRkqtu0ETQgVfEtF+LGT/9z4anKM9P5Fz7d3hUl1u/xLqLqF5
+        pHTq2WF+/JjiNEIPp0lgwfOTotX89f5XAAAA//+uzd50/gIAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '436'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:47:07 GMT
+      Vary:
+      - Accept-Encoding
+      X-Nomad-Index:
+      - '261'
+      X-Nomad-Knownleader:
+      - 'true'
+      X-Nomad-Lastcontact:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.22.0
+    method: GET
+    uri: http://nomad:4646/v1/allocation/f7ba0909-d3c3-0789-838f-53bc9cc596ae
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1593'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:47:07 GMT
+      Vary:
+      - Accept-Encoding
+      X-Nomad-Index:
+      - '261'
+      X-Nomad-Knownleader:
+      - 'true'
+      X-Nomad-Lastcontact:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.22.0
+    method: GET
+    uri: http://nomad:4646/v1/nodes
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/7xU0U7bMBT9lehqj0nkhIbEfkN0EzwMTYLtgTFVN/YteHWczrEZFeq/T05LmcpA
+        0yZVeYh877HP0fHx/foIJ0o5GgYQYPsOFaRw6gg9nVtFDyDqFKboUZL15ECA1H4FKUwdagtijmag
+        uNL35AYQj/CDuhD/J9473QZPAwgbjElhSp6kJ7XbdUZo/N2UBun00uveggB4Kq92sM9LhZ6udEcg
+        oGQFz1iTseaKVaI6EpM6Pz6aNGV5DesUul4uZmpUsy/iETb1PGJAgHeB4pZnWbHyZ1VPkn4TtwH/
+        jTZesmIU5xb+P5z5gNqQSnyf0APJ4ClxC59E23VvxVgUyU0kuQGxxWBrKJlrQ4ntfTLvg1WJtsm7
+        TydXZ//oNK+3VkeGVz3eNA/mcVUc13xU9R3v8eDxi18z0qteLt6I3qadu2C97mIHXLAS0r1+P8z8
+        ahn5jLbhYb//ZOz+tm0WQEDR5Izn5UtEb0JHQ042JkO9dlDrtLqlmV7Go+oyL+qc5cUBLnLCOSsm
+        m8eCP2dvRuwZcLinfNzU17Bep3A+BQFY1KqcUJGxuqWs4BIzjmySVcRwLpVkvOKQwsde6flqO055
+        Chc4UiDKqmrbZt4SQgoXvaJTg+MghhQu5R2pYLS9fW/0rW61iXNXAI0rE+/s0qMPY4YI1WpXeBHo
+        L7tYsJznRaboHtbffgUAAP//KjDZwfoFAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '539'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Aug 2019 06:47:07 GMT
+      Vary:
+      - Accept-Encoding
+      X-Nomad-Index:
+      - '9'
+      X-Nomad-Knownleader:
+      - 'true'
+      X-Nomad-Lastcontact:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

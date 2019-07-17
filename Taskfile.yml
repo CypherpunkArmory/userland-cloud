@@ -46,7 +46,7 @@ x-deploy-vars: &x-deploy-vars
 x-release-vars: &x-release-vars
   VER: '{{ default "next" .VER }}'
   RELEASED_TAG:
-    sh: git describe --abbrev=0 --tags --match "{{.KIND}}*"
+    sh: git describe --abbrev=0 --tags --match "{{.KIND | default ""}}*"
   SOURCE_COMMIT:
     sh: git rev-parse HEAD
   NEXT_TAG:
@@ -92,7 +92,7 @@ tasks:
       - sleep 3
       - docker-compose exec db createdb -U postgres userland_development
       - docker-compose exec db createdb -U postgres userland_test
-      - docker-compose run web flask db upgrade
+      - docker-compose run web python -m flask db upgrade
       - docker-compose run web python -m flask plan populate
 
   setup_net:
@@ -227,7 +227,7 @@ tasks:
       <<: *x-deploy-vars
     preconditions:  *x-deploy-pre
     status:
-      - "[ '{{.HOOK}}' == 'none' ]"
+      - "[[ '{{.HOOK}}' == none* ]]"
     cmds:
       - terraform workspace select {{.WORKSPACE}}
       - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version={{.HP_TAG}}" -out "hookfile"
@@ -255,7 +255,7 @@ tasks:
           if [ "$complete" = "failed" ]; then
             echo $red;
           fi
-          
+
         // BOX_TAG:
         // sh: |
         //   if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
@@ -276,7 +276,7 @@ tasks:
         echo "--- Task Stderr ---"
         nomad alloc logs --stderr $(echo "$alloc"  | awk '{ print $1 }')
         echo -e "\n\n"
-      - nomad job stop -purge userland-hook
+      - NOMAD_ADDR={{.NOMAD_ADDR}} nomad job stop -purge userland-hook
       - terraform destroy --auto-approve -target nomad_job.userland_hook
       - rm hookfile
 
@@ -310,40 +310,6 @@ tasks:
       - terraform workspace select {{.WORKSPACE}}
       - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
       - terraform apply "planfile"
-      - sleep 1
-      - |
-        export NOMAD_ADDR={{.NOMAD_ADDR}}
-        echo "Waiting for deploy to green."
-        deployment=$(nomad deployment list | grep "running" | awk '{ print $1 }')
-        green=$(tput setaf 2)
-        service_complete="0"
-        worker_complete="0"
-        check_count=0
-        while [ $service_complete = "0" ] || [ $worker_complete = "0" ]; do
-
-          echo $(tput sgr0)
-          service_status=$(nomad deployment status $deployment | grep "^services")
-          service_complete=$(echo -e "$service_status" | awk '{if($4==$7){print "1"}else{print "0"}}')
-          if [ $service_complete == "1" ]; then
-            echo $green
-          fi
-          echo -e "$service_status $(tput sgr0)"
-
-          worker_status=$(nomad deployment status $deployment | grep "^workers")
-          worker_complete=$(echo -e "$worker_status" | awk '{if($4==$7){print "1"}else{print "0"}}')
-          if [ $worker_complete == "1" ]; then
-            echo $green
-          fi
-          echo -e "$worker_status $(tput sgr0)"
-
-          check_count=$((check_count+1))
-          test $check_count -gt 160 && exit 1
-          awk "BEGIN { while (c++ < $check_count) printf \"=\" }" && echo
-          sleep 1
-        done
-        echo $(tput sgr0)
-        nomad deployment promote $deployment
-      - rm planfile
       - task: cluster-exec
         vars:
           HP_TAG: "{{.HP_TAG}}"

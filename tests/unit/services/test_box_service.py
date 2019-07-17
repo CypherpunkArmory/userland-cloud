@@ -13,7 +13,9 @@ class TestBoxCreationService(object):
     def test_create_box_user(self, current_free_user, session):
         """ Raises an exception when too many open boxes"""
 
-        zero_limit = UserLimit(box_count=0, bandwidth=0, forwards=0, reserved_config=0)
+        zero_limit = UserLimit(
+            box_count=0, bandwidth=0, forwards=0, reserved_config=0, time_limit=0
+        )
         conf = ConfigFactory(user=current_free_user)
         session.add(conf)
 

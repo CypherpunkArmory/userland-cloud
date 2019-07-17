@@ -1,4 +1,4 @@
-from factory import Factory, post_generation, Faker, SubFactory, Trait
+from factory import Factory, Trait
 from pytest_factoryboy import register
 
 from app.models import Plan
@@ -15,7 +15,9 @@ class PlanFactory(Factory):
     reserved_config = 5
     cost = 999
     name = "paid"
-    stripe_id = "userland_paid"
+    # NOTE If you delete the plan on the test account, you are going to need to
+    # update this plan id
+    stripe_id = "plan_FZrbLVsKMsw3IL"
 
     class Params:
         paid = True
@@ -47,5 +49,15 @@ class PlanFactory(Factory):
             reserved_config=1,
             cost=0,
             name="beta",
+            stripe_id=None,
+        )
+
+        admin = Trait(
+            box_count=20,
+            bandwidth=10000,
+            forwards=100,
+            reserved_config=1,
+            cost=0,
+            name="admin",
             stripe_id=None,
         )

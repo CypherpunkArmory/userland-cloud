@@ -1,39 +1,15 @@
 import stripe
 import click
+import json
 from flask.cli import with_appcontext
+from flask import current_app
 from app.models import Plan
 from app import db
+from stripe.error import InvalidRequestError
 
-LIMITS = {
-    "free": {
-        "box_count": 1,
-        "bandwidth": 100,
-        "forwards": 2,
-        "reserved_config": 0,
-        "cost": 0,
-    },
-    "waiting": {
-        "box_count": 0,
-        "bandwidth": 0,
-        "forwards": 0,
-        "reserved_config": 0,
-        "cost": 0,
-    },
-    "beta": {
-        "box_count": 2,
-        "bandwidth": 1000,
-        "forwards": 10,
-        "reserved_config": 1,
-        "cost": 0,
-    },
-    "paid": {
-        "box_count": 5,
-        "bandwidth": 100000,
-        "forwards": 9999,
-        "reserved_config": 5,
-        "cost": 999,
-    },
-}
+
+with open("support/plans.json") as plans:
+    LIMITS = json.load(plans)
 
 
 @click.group()
@@ -49,21 +25,35 @@ def create_product_command():
 
 
 def create_product():
-    """ Create Stripe Products for Userland """
+    """ Create Stripe Products for Userland"""
+
+    try:
+        stripe.Product.retrieve("userland")
+    except InvalidRequestError:
+        stripe.Product.create(name="Userland.tech", type="service", id="userland")
+
     for plan in Plan.query.all():
         if plan.cost == 0:
             continue
 
-        stripe.Product.create(name="Userland.io", type="service", id=plan.name)
+        if plan.stripe_id:
+            try:
+                stripe.Plan.retrieve(plan.stripe_id)
+                current_app.logger.info(
+                    f"Skipping `{plan.name}` as it already exists on Stripe"
+                )
+            except InvalidRequestError:
+                pass  # expected for plans not created yet
+
         stripe_plan = stripe.Plan.create(
-            product=plan.name,
+            product="userland",
             nickname=f"Userland Service: {plan.name}",
             interval="month",
             currency="usd",
             amount=plan.cost,
         )
 
-        plan.stripe_id = stripe_plan["product"]
+        plan.stripe_id = stripe_plan["id"]
         db.session.add(plan)
 
     db.session.commit()
@@ -76,7 +66,8 @@ def populate_command():
 
 
 def populate():
-    """ Create DB Entries for Userland Cloud Plans"""
+    """ Create DB Entries for Userland Plans"""
+    global LIMITS
 
     for plan_name, plan in LIMITS.items():
         p = Plan(**{"name": plan_name}, **plan)

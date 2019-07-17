@@ -11,5 +11,5 @@ class TestUserLimits(object):
         session.flush()
 
         assert user.limits() == UserLimit(
-            tunnel_count=5, bandwidth=100000, forwards=9999, reserved_subdomains=5
+            box_count=5, bandwidth=100000, forwards=9999, reserved_config=5
         )

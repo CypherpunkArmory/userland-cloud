@@ -102,8 +102,11 @@ services:
 
   scheduler:
     <<: *default
-    build: .
     command: python -m flask rq scheduler
+    depends_on:
+      - jobs
+    volumes:
+      - .:/userland
 
   consul:
     image: consul

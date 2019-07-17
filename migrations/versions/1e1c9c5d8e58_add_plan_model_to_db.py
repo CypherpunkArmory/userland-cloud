@@ -21,10 +21,10 @@ def upgrade():
     op.create_table(
         "plan",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("tunnel_count", sa.Integer(), nullable=True),
+        sa.Column("box_count", sa.Integer(), nullable=True),
         sa.Column("bandwidth", sa.Integer(), nullable=True),
         sa.Column("forwards", sa.Integer(), nullable=True),
-        sa.Column("reserved_subdomains", sa.Integer(), nullable=True),
+        sa.Column("reserved_config", sa.Integer(), nullable=True),
         sa.Column("cost", sa.Integer(), nullable=True),
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("stripe_id", sa.String(), nullable=True),

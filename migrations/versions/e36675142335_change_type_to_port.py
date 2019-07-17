@@ -17,10 +17,10 @@ depends_on = None
 
 
 def upgrade():
-    op.alter_column("tunnel", "type", nullable=False, new_column_name="port")
+    op.alter_column("box", "type", nullable=False, new_column_name="port")
     pass
 
 
 def downgrade():
-    op.alter_column("tunnel", "port", nullable=False, new_column_name="type")
+    op.alter_column("box", "port", nullable=False, new_column_name="type")
     pass

@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "tunnel_create.json",
+  "$id": "box_create.json",
   "definitions": {
-    "tunnel": {
+    "box": {
       "allOf": [
         {
           "$ref": "json-api.json#/definitions/post_data"
@@ -26,7 +26,7 @@
             "relationships": {
               "type": "object",
               "properties": {
-                "subdomain": {
+                "config": {
                   "$ref": "json-api.json#/definitions/relationship"
                 }
               }
@@ -39,6 +39,6 @@
   "type": "object",
   "required": ["data"],
   "properties": {
-    "data": { "$ref": "#/definitions/tunnel" }
+    "data": { "$ref": "#/definitions/box" }
   }
 }

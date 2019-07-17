@@ -12,7 +12,7 @@ exclude_lines =
     raise AccessDenied
     raise AssertionError
     raise NotImplementedError
-    raise TunnelError
+    raise BoxError
 
     # Don't complain about configuration code
     if os\.getenv\(\"FLASK_ENV\"\) == "production":
@@ -22,10 +22,10 @@ exclude_lines =
     if __name__ == .__main__.:
 
     # Don't complain if tests hit validation errors or nomad errors
-    except SubdomainTaken:
+    except ConfigTaken:
     except nomad\.api\.exceptions\.BaseNomadException:
     except ValidationError:
     except ValidationError as e:
-    except TunnelError: 
+    except BoxError: 
     
     

@@ -1,29 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "subdomain.json",
+  "$id": "config_create.json",
   "definitions": {
-    "subdomain": {
+    "config": {
       "allOf": [
         {
-          "$ref": "json-api.json#/definitions/data"
+          "$ref": "json-api.json#/definitions/post_data"
         },
         {
           "properties": {
             "attributes": {
               "required": [
-                "name",
-                "inUse",
-                "reserved"
+                "name"
               ],
               "properties": {
                 "name": {
                   "type": "string"
-                },
-                "inUse": {
-                  "type": "boolean"
-                },
-                "reserved": {
-                  "type": "boolean"
                 }
               }
             }
@@ -35,6 +27,6 @@
   "type": "object",
   "required": ["data"],
   "properties": {
-    "data": { "$ref": "#/definitions/subdomain" }
+    "data": { "$ref": "#/definitions/config" }
   }
 }

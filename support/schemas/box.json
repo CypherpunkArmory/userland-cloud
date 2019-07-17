@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "tunnel.json",
+  "$id": "box.json",
   "definitions": {
-    "tunnel": {
+    "box": {
       "allOf": [
         {
           "$ref": "json-api.json#/definitions/data"
@@ -15,7 +15,7 @@
                 "ipAddress"
               ],
               "properties": {
-                "subdomain": {
+                "config": {
                   "type": "string"
                 },
                 "sshPort":{
@@ -31,6 +31,6 @@
   "type": "object",
   "required": ["data"],
   "properties": {
-    "data": { "$ref": "#/definitions/tunnel" }
+    "data": { "$ref": "#/definitions/box" }
   }
 }

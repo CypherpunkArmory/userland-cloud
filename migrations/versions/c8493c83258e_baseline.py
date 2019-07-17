@@ -26,7 +26,7 @@ def upgrade():
     )
     op.create_index(op.f("ix_user_email"), "user", ["email"], unique=True)
     op.create_table(
-        "subdomain",
+        "config",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("name", sa.String(length=64), nullable=False, unique=True),
         sa.Column("user_id", sa.Integer(), nullable=True),
@@ -35,30 +35,30 @@ def upgrade():
         sa.ForeignKeyConstraint(["user_id"], ["user.id"]),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_subdomain_name"), "subdomain", ["name"], unique=True)
+    op.create_index(op.f("ix_config_name"), "config", ["name"], unique=True)
     op.create_table(
-        "tunnel",
+        "box",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("tunnel_server", sa.String(length=64), nullable=False),
-        sa.Column("tunnel_ssh_port", sa.Integer(), nullable=False),
-        sa.Column("tunnel_connection_port", sa.Integer(), nullable=False),
-        sa.Column("subdomain_id", sa.Integer(), nullable=False, unique=True),
+        sa.Column("box_server", sa.String(length=64), nullable=False),
+        sa.Column("box_ssh_port", sa.Integer(), nullable=False),
+        sa.Column("box_connection_port", sa.Integer(), nullable=False),
+        sa.Column("config_id", sa.Integer(), nullable=False, unique=True),
         sa.Column("type", sa.String(length=16), nullable=False),
-        sa.Column("subdomain_id", sa.Integer(), nullable=False, unique=True),
+        sa.Column("config_id", sa.Integer(), nullable=False, unique=True),
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(["user_id"], ["user.id"]),
-        sa.ForeignKeyConstraint(["subdomain_id"], ["subdomain.id"]),
+        sa.ForeignKeyConstraint(["config_id"], ["config.id"]),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_tunnel_id"), "tunnel", ["id"], unique=True)
+    op.create_index(op.f("ix_box_id"), "box", ["id"], unique=True)
     pass
 
 
 def downgrade():
     op.drop_index(op.f("ix_user_email"), table_name="user")
     op.drop_table("user")
-    op.drop_index(op.f("ix_tunnel_id"), table_name="tunnel")
-    op.drop_table("tunnel")
-    op.drop_index(op.f("ix_subdomain_name"), table_name="subdomain")
-    op.drop_table("subdomain")
+    op.drop_index(op.f("ix_box_id"), table_name="box")
+    op.drop_table("box")
+    op.drop_index(op.f("ix_config_name"), table_name="config")
+    op.drop_table("config")
     pass

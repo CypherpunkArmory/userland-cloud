@@ -17,10 +17,10 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column("tunnel", sa.Column("session_end_time", TIMESTAMP, nullable=True))
+    op.add_column("box", sa.Column("session_end_time", TIMESTAMP, nullable=True))
     pass
 
 
 def downgrade():
-    op.drop_column("tunnel", "session_end_time")
+    op.drop_column("box", "session_end_time")
     pass

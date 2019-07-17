@@ -6,31 +6,31 @@ from app import db
 
 LIMITS = {
     "free": {
-        "tunnel_count": 1,
+        "box_count": 1,
         "bandwidth": 100,
         "forwards": 2,
-        "reserved_subdomains": 0,
+        "reserved_config": 0,
         "cost": 0,
     },
     "waiting": {
-        "tunnel_count": 0,
+        "box_count": 0,
         "bandwidth": 0,
         "forwards": 0,
-        "reserved_subdomains": 0,
+        "reserved_config": 0,
         "cost": 0,
     },
     "beta": {
-        "tunnel_count": 2,
+        "box_count": 2,
         "bandwidth": 1000,
         "forwards": 10,
-        "reserved_subdomains": 1,
+        "reserved_config": 1,
         "cost": 0,
     },
     "paid": {
-        "tunnel_count": 5,
+        "box_count": 5,
         "bandwidth": 100000,
         "forwards": 9999,
-        "reserved_subdomains": 5,
+        "reserved_config": 5,
         "cost": 999,
     },
 }

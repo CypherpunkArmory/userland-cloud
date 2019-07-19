@@ -18,11 +18,11 @@ depends_on = None
 
 def upgrade():
     op.alter_column(
-        "tunnel", "port", type_=sa.ARRAY(sa.String()), postgresql_using="array[port]"
+        "box", "port", type_=sa.ARRAY(sa.String()), postgresql_using="array[port]"
     )
     pass
 
 
 def downgrade():
-    op.alter_column("tunnel", "port", type_=sa.String())
+    op.alter_column("box", "port", type_=sa.String())
     pass

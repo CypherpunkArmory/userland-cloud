@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "subdomains.json",
+  "$id": "boxes.json",
   "type": "object",
   "required": [
     "data"
@@ -9,7 +9,7 @@
     "data": {
       "type": "array",
       "items": {
-        "$ref": "subdomain.json#/definitions/subdomain"
+        "$ref": "box.json#/definitions/box"
       }
     }
   }

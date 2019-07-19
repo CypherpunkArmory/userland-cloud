@@ -60,10 +60,10 @@ def create_app(env: str = "development"):
     stripe.api_base = app.config["STRIPE_ENDPOINT"]
     from app.jobs.nomad_cleanup import check_all_boxes
 
-    # queue job every day at noon (UTC!)
-    check_all_boxes.cron("0 0 12 * *", "Check running tunnels")
-    from app.routes.tunnels import tunnel_blueprint
-    from app.routes.subdomains import subdomain_blueprint
+    # queue job hour
+    check_all_boxes.cron("0 * * * *", "Check running boxes")
+    from app.routes.boxes import box_blueprint
+    from app.routes.config import config_blueprint
     from app.routes.authentication import auth_blueprint
     from app.routes.account import account_blueprint
     from app.routes.root import root_blueprint
@@ -78,8 +78,8 @@ def create_app(env: str = "development"):
         limiter.limit("3/second")(auth_blueprint)
 
     app.register_blueprint(auth_blueprint)
-    app.register_blueprint(tunnel_blueprint)
-    app.register_blueprint(subdomain_blueprint)
+    app.register_blueprint(box_blueprint)
+    app.register_blueprint(config_blueprint)
     app.register_blueprint(account_blueprint)
     app.register_blueprint(root_blueprint)
     app.cli.add_command(plan)

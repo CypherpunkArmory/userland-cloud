@@ -5,9 +5,9 @@ import inflection
 drinkingCamel = partial(inflection.camelize, uppercase_first_letter=False)
 
 
-class TunnelSchema(Schema):
+class BoxSchema(Schema):
     class Meta:
-        type_ = "tunnel"
+        type_ = "box"
         strict = True
         inflect = drinkingCamel
 
@@ -16,17 +16,17 @@ class TunnelSchema(Schema):
     ssh_port = fields.Str()
     ip_address = fields.Str()
 
-    subdomain = fields.Relationship(
-        "/subdomains/{subdomain_id}",
-        related_url_kwargs={"subdomain_id": "<subdomain_id>"},
+    config = fields.Relationship(
+        "/configs/{config_id}",
+        related_url_kwargs={"config_id": "<config_id>"},
         include_resource_linkage=True,
-        type_="subdomain",
+        type_="config",
     )
 
 
-class SubdomainSchema(Schema):
+class ConfigSchema(Schema):
     class Meta:
-        type_ = "subdomain"
+        type_ = "config"
         strict = True
         inflect = drinkingCamel
 

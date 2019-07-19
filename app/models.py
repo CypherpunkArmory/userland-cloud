@@ -1,5 +1,5 @@
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy import types
+from sqlalchemy import types, DateTime
 from werkzeug import check_password_hash, generate_password_hash
 from app import db
 from sqlalchemy.dialects.postgresql import UUID
@@ -7,31 +7,31 @@ from typing import NamedTuple
 
 
 class UserLimit(NamedTuple):
-    tunnel_count: int
+    box_count: int
     bandwidth: int
     time_limit: int
     forwards: int
-    reserved_subdomains: int
+    reserved_config: int
 
 
-class Subdomain(db.Model):  # type: ignore
+class Config(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, nullable=False, unique=True)
     reserved = db.Column(db.Boolean)
     in_use = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    user = db.relationship("User", back_populates="subdomains", lazy="joined")
+    user = db.relationship("User", back_populates="configs", lazy="joined")
 
     def __repr__(self):
-        return "<Subdomain {}>".format(self.name)
+        return "<Config {}>".format(self.name)
 
 
 class Plan(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
-    tunnel_count = db.Column(db.Integer)
+    box_count = db.Column(db.Integer)
     bandwidth = db.Column(db.Integer)
     forwards = db.Column(db.Integer)
-    reserved_subdomains = db.Column(db.Integer)
+    reserved_config = db.Column(db.Integer)
     cost = db.Column(db.Integer)
     name = db.Column(db.String, index=True, nullable=False, unique=True)
     stripe_id = db.Column(db.String, index=True, unique=True)
@@ -58,11 +58,11 @@ class Plan(db.Model):  # type: ignore
 
     def limits(self):
         return UserLimit(
-            tunnel_count=self.tunnel_count,
+            box_count=self.box_count,
             bandwidth=self.bandwidth,
             time_limit=1800,
             forwards=self.forwards,
-            reserved_subdomains=self.reserved_subdomains,
+            reserved_config=self.reserved_config,
         )
 
 
@@ -73,10 +73,10 @@ class User(db.Model):  # type: ignore
     password_hash = db.Column(db.String(128))
     uuid = db.Column(UUID(as_uuid=True), nullable=False, unique=True)
     plan_id = db.Column(db.Integer, db.ForeignKey("plan.id", name="user_plan_fk"))
-    subdomains = db.relationship(
-        "Subdomain", back_populates="user", lazy="dynamic", cascade="all, delete"
+    configs = db.relationship(
+        "Config", back_populates="user", lazy="dynamic", cascade="all, delete"
     )
-    tunnels = db.relationship("Tunnel", secondary="subdomain", lazy="dynamic")
+    boxes = db.relationship("Box", secondary="config", lazy="dynamic")
     plan = db.relationship("Plan", lazy="joined")
 
     def __repr__(self):
@@ -91,20 +91,22 @@ class User(db.Model):  # type: ignore
     def limits(self):
         return self.plan.limits()
 
+    @property
     def tier(self):
         return self.plan.name
 
 
-class Tunnel(db.Model):  # type: ignore
+class Box(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     port = db.Column(types.ARRAY(types.String()))
-    subdomain_id = db.Column(db.Integer, db.ForeignKey("subdomain.id"))
+    config_id = db.Column(db.Integer, db.ForeignKey("config.id"))
     ssh_port = db.Column(db.Integer)
     job_id = db.Column(db.String(64))
     ip_address = db.Column(db.String(32))
-    subdomain = db.relationship("Subdomain", backref="tunnel", lazy="joined")
+    config = db.relationship("Config", backref="box", lazy="joined")
+    session_end_time = db.Column(DateTime())
 
-    user = association_proxy("subdomain", "user")
+    user = association_proxy("config", "user")
 
     def __repr__(self):
-        return "<Tunnel {} {}>".format(self.subdomain, self.job_id)
+        return "<Box {} {}>".format(self.config, self.job_id)

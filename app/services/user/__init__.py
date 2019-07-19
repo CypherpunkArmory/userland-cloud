@@ -22,7 +22,7 @@ def user_notify_email_change(user, old_value, *_):
 
 @event.listens_for(User.plan_id, "set")
 def user_tier_change(user, value, oldvalue, initiator):
-    if user.plan.name == "paid":
+    if user.tier == "paid":
 
         @event.listens_for(db.session, "after_commit", once=True)
         def subscribe_after_commit(_):

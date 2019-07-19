@@ -1,6 +1,6 @@
 from tests.factories.user import UnconfirmedUserFactory, UserFactory
-from app.models import User, Subdomain, Tunnel
-from tests.factories import subdomain, tunnel
+from app.models import User, Config, Box
+from tests.factories import config, box
 from unittest import mock
 from app.services import authentication
 import re
@@ -328,15 +328,15 @@ class TestAccount(object):
         assert res.status_code is 200
         assert user is None
 
-    def test_account_delete_account_with_reserved_subdomains(
+    def test_account_delete_account_with_reserved_config(
         self, client, current_user, session
     ):
-        """DELETE to /account url succeeds and associated reserved subdomains no longer exists"""
-        sub1 = subdomain.ReservedSubdomainFactory(user=current_user, name="sub-bass")
-        session.add(sub1)
+        """DELETE to /account url succeeds and associated reserved configs no longer exists"""
+        conf1 = config.ReservedConfigFactory(user=current_user, name="sub-bass")
+        session.add(conf1)
         session.flush()
 
-        assert Subdomain.query.filter_by(id=sub1.id).first() is not None
+        assert Config.query.filter_by(id=conf1.id).first() is not None
 
         res = client.delete(
             "/account",
@@ -345,20 +345,20 @@ class TestAccount(object):
 
         assert res.status_code is 200
         assert User.query.filter_by(uuid=current_user.uuid).first() is None
-        assert Subdomain.query.filter_by(id=sub1.id).first() is None
+        assert Config.query.filter_by(id=conf1.id).first() is None
 
-    def test_account_delete_account_with_existing_tunnels(
+    def test_account_delete_account_with_existing_boxes(
         self, client, current_user, session
     ):
-        """DELETE to /account url succeeds and associated tunnels no longer exists"""
-        sub1 = subdomain.ReservedSubdomainFactory(user=current_user, name="supersub")
-        tun1 = tunnel.TunnelFactory(subdomain=sub1)
+        """DELETE to /account url succeeds and associated boxes no longer exists"""
+        conf1 = config.ReservedConfigFactory(user=current_user, name="supersub")
+        box1 = box.BoxFactory(config=conf1)
 
-        session.add(tun1)
+        session.add(box1)
         session.flush()
 
-        assert Subdomain.query.filter_by(id=sub1.id).first() is not None
-        assert Tunnel.query.filter_by(job_id=tun1.job_id).first() is not None
+        assert Config.query.filter_by(id=conf1.id).first() is not None
+        assert Box.query.filter_by(job_id=box1.job_id).first() is not None
 
         res = client.delete(
             "/account",
@@ -367,8 +367,8 @@ class TestAccount(object):
 
         assert res.status_code is 200
         assert User.query.filter_by(uuid=current_user.uuid).first() is None
-        assert Subdomain.query.filter_by(id=sub1.id).first() is None
-        assert Tunnel.query.filter_by(job_id=tun1.job_id).first() is None
+        assert Config.query.filter_by(id=conf1.id).first() is None
+        assert Box.query.filter_by(job_id=box1.job_id).first() is None
 
     def test_revoke_tokens(self, app, current_user, client, unauthenticated_client):
         """Delete to /account/token url returns a 204 on success and bearer token no longer works"""
@@ -384,7 +384,7 @@ class TestAccount(object):
         res2 = client.delete("/account/token")
         assert res2.status_code == 204
 
-        res3 = client.get("/subdomains")
+        res3 = client.get("/configs")
         assert res3.status_code == 404, res3.get_json()
 
         res4 = unauthenticated_client.post(

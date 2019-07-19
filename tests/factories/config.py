@@ -2,16 +2,16 @@ from factory import Factory, SubFactory, fuzzy
 from faker import Faker as RealFaker
 from pytest_factoryboy import register
 
-from app.models import Subdomain
+from app.models import Config
 from tests.factories.user import UserFactory
 
 fake = RealFaker()
 
 
 @register
-class SubdomainFactory(Factory):
+class ConfigFactory(Factory):
     class Meta:
-        model = Subdomain
+        model = Config
 
     user = SubFactory(UserFactory)
     in_use = False
@@ -21,22 +21,22 @@ class SubdomainFactory(Factory):
 
 
 @register
-class ReservedSubdomainFactory(SubdomainFactory):
+class ReservedConfigFactory(ConfigFactory):
     reserved = True
 
 
 @register
-class InuseSubdomainFactory(SubdomainFactory):
+class InuseConfigFactory(ConfigFactory):
     in_use = True
 
 
 @register
-class InuseReservedSubdomainFactory(SubdomainFactory):
+class InuseReservedConfigFactory(ConfigFactory):
     in_use = True
     reserved = True
 
 
 @register
-class InuseUnreservedSubdomainFactory(SubdomainFactory):
+class InuseUnreservedConfigFactory(ConfigFactory):
     in_use = True
     reserved = False

@@ -18,7 +18,7 @@ class UserNotification:
         if self.user.confirmed:
             return
 
-        if self.user.tier() == "waiting":
+        if self.user.tier == "waiting":
             send_beta_backlog_notification_email.queue(self.user.email)
         else:
             self.registration_email()

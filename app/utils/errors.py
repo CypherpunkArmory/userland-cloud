@@ -57,22 +57,22 @@ class InternalServerError(JsonApiException):
 
     title = "InternalServerError"
     status = "500"
-    detail = "Holepunch has encountered an internal error - please report this at github.com/cypherpunkarmory/holepunch"
+    detail = "Userland Cloud has encountered an internal error - please report this at github.com/cypherpunkarmory/userland-cloud"
 
 
-class TunnelError(JsonApiException):
-    """Raised when there is an error creating/deleting a tunnel"""
+class BoxError(JsonApiException):
+    """Raised when there is an error creating/deleting a box"""
 
-    title = "Tunnel Error"
+    title = "Box Error"
     status = "500"
 
 
-class SubdomainError(JsonApiException):
-    """Raised when there is an error creating/deleting a subdomain"""
+class ConfigError(JsonApiException):
+    """Raised when there is an error creating/deleting a config"""
 
-    title = "Subdomain Error"
+    title = "Config Error"
     status = "500"
-    detail = "Database error when changing subdomains"
+    detail = "Database error when changing configs"
 
 
 class UserError(JsonApiException):
@@ -83,20 +83,20 @@ class UserError(JsonApiException):
     detail = "Database error when updating user"
 
 
-class TunnelLimitReached(JsonApiException):
-    """Raised when the number of tunnels opened is greater than the limit for their tier"""
+class BoxLimitReached(JsonApiException):
+    """Raised when the number of boxes opened is greater than the limit for their tier"""
 
-    title = "Tunnel Limit Reached"
+    title = "Box Limit Reached"
     status = "403"
-    detail = "Number of tunnels is greater than the tier will allow"
+    detail = "Number of boxes is greater than the tier will allow"
 
 
-class SubdomainLimitReached(JsonApiException):
-    """Raised when the number of subdomains reserved is greater than the limit for their tier"""
+class ConfigLimitReached(JsonApiException):
+    """Raised when the number of configs reserved is greater than the limit for their tier"""
 
-    title = "Subdomain Limit Reached"
+    title = "Config Limit Reached"
     status = "403"
-    detail = "Number of subdomains is greater than the tier will allow"
+    detail = "Number of configs is greater than the tier will allow"
 
 
 class MalformedAPIHeader(JsonApiException):
@@ -118,7 +118,7 @@ class OldAPIVersion(JsonApiException):
 
 
 class NotFoundError(JsonApiException):
-    """Raised when there is an error creating/deleting a tunnel"""
+    """Raised when there is an error creating/deleting a box"""
 
     title = "Not Found Error"
     detail = "Not Found"
@@ -141,19 +141,19 @@ class BadRequest(JsonApiException):
     status = "400"
 
 
-class SubdomainTaken(JsonApiException):
-    """SubdomainTaken error"""
+class ConfigTaken(JsonApiException):
+    """ConfigTaken error"""
 
-    title = "Subdomain Taken"
-    detail = "Subdomain has already been reserved"
+    title = "Config Taken"
+    detail = "Config has already been reserved"
     status = "400"
 
 
-class SubdomainInUse(JsonApiException):
-    """SubdomainTaken error"""
+class ConfigInUse(JsonApiException):
+    """ConfigTaken error"""
 
-    title = "Subdomain is being used"
-    detail = "Subdomain is associated with a running tunnel"
+    title = "Config is being used"
+    detail = "Config is associated with a running box"
     status = "403"
 
 

@@ -7,7 +7,7 @@ job "ssh-client" {
     meta_required = ["ssh_key", "box_name", "base_url", "bandwidth", "time_limit"]
   }
 
-  group "holepunch" {
+  group "userland" {
     count = 1
     task "sshd" {
       driver = "docker"
@@ -17,7 +17,7 @@ job "ssh-client" {
         network_mode = "private-holes_default"
 
         labels {
-          "io.holepunch.sshd" = "${NOMAD_META_BOX_NAME}"
+          "io.userland.sshd" = "${NOMAD_META_BOX_NAME}"
         }
 
         port_map {

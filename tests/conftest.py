@@ -9,7 +9,7 @@ from tests.factories import user, plan as plan_factory
 
 @pytest.fixture(scope="session")
 def app(request):
-    load_dotenv("/holepunch/.env.test", override=True)
+    load_dotenv("/userland/.env.test", override=True)
     app = create_app("test")
     return app
 

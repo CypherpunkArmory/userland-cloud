@@ -22,7 +22,7 @@ jobs:
   build:
     machine: true
 
-    working_directory: ~/holepunch
+    working_directory: ~/userland
 
     steps:
       - checkout
@@ -53,7 +53,7 @@ jobs:
             sudo cp ./nomad /usr/bin/nomad
             sudo chmod +x /usr/bin/nomad
 
-      - run: docker build -t holepunch --build-arg APP_NAME=holepunch .
+      - run: docker build -t userland --build-arg APP_NAME=userland .
 
       - run:
           name: Start container
@@ -74,7 +74,7 @@ jobs:
           command: dockerize -wait http://localhost:5000 -timeout 1m
 
       - run:
-          name: Setup holepunch
+          name: Setup userland cloud
           command: |
             ./bin/task setup_db
             ./bin/task setup_tun

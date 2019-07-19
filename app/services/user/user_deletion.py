@@ -1,8 +1,8 @@
 from app import db
 import app.services.authentication as authentication
 from app.utils.errors import AccessDenied
-from app.services.tunnel import TunnelDeletionService
-from app.models import Tunnel
+from app.services.box import BoxDeletionService
+from app.models import Box
 
 
 class UserDeletion:
@@ -19,9 +19,9 @@ class UserDeletion:
         if not self.user.check_password(self.password):
             raise AccessDenied("Wrong password")
 
-        tunnels = Tunnel.query.filter_by(user=self.user)
-        for tunnel in tunnels:
-            TunnelDeletionService(self.user, tunnel).delete()
+        boxes = Box.query.filter_by(user=self.user)
+        for box in boxes:
+            BoxDeletionService(self.user, box).delete()
 
         entries_deleted = db.session.delete(self.user)
         db.session.flush()

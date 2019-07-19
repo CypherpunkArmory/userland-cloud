@@ -4,7 +4,7 @@ job "ssh-client" {
   type = "batch"
 
   parameterized {
-    meta_required = ["ssh_key", "box_name", "base_url", "bandwidth"]
+    meta_required = ["ssh_key", "box_name", "base_url", "bandwidth", "time_limit"]
   }
 
   group "userland" {
@@ -28,6 +28,7 @@ job "ssh-client" {
       env {
         "SSH_KEY" = "${NOMAD_META_SSH_KEY}"
         "BANDWIDTH" = "${NOMAD_META_BANDWIDTH}"
+        "TIME_LIMIT" = "${NOMAD_META_TIME_LIMIT}"
       }
 
       service {

@@ -102,6 +102,7 @@ class TunnelCreationService:
             "box_name": self.subdomain.name,
             "base_url": current_app.config["BASE_SERVICE_URL"],
             "bandwidth": str(self.current_user.limits().bandwidth),
+            "time_limit": str(self.current_user.limits().time_limit),
         }
 
         result = self.nomad_client.job.dispatch_job("ssh-client", meta=meta)

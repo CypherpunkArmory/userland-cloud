@@ -9,6 +9,7 @@ from typing import NamedTuple
 class UserLimit(NamedTuple):
     tunnel_count: int
     bandwidth: int
+    time_limit: int
     forwards: int
     reserved_subdomains: int
 
@@ -59,6 +60,7 @@ class Plan(db.Model):  # type: ignore
         return UserLimit(
             tunnel_count=self.tunnel_count,
             bandwidth=self.bandwidth,
+            time_limit=1800,
             forwards=self.forwards,
             reserved_subdomains=self.reserved_subdomains,
         )

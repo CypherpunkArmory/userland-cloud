@@ -16,11 +16,5 @@ class BoxFactory(Factory):
         model = Box
 
     config = SubFactory(ConfigFactory)
-    port = ["http"]
     ssh_port = randint(1000, 32678)
     job_id = f"ssh/dispatch-{randint(1000,3678)}"
-
-
-@register
-class HttpsBoxFactory(BoxFactory):
-    port = ["https"]

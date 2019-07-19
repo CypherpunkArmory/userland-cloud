@@ -52,13 +52,12 @@ def start_box() -> Tuple[Response, int]:
         json_schema_manager.validate(request.json, "box_create.json")
 
         config_id = dig(request.json, "data/relationships/config/data/id")
-        port_type = dig(request.json, "data/attributes/port")
         ssh_key = dig(request.json, "data/attributes/sshKey")
 
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         try:
             box_info = BoxCreationService(
-                current_user, config_id, port_type, ssh_key
+                current_user, config_id, ssh_key
             ).create()
         except ConfigLimitReached:
             return json_api(ConfigLimitReached, ErrorSchema), 403

@@ -34,13 +34,13 @@ def config_index():
 
 @config_blueprint.route("/configs", methods=["POST"])
 @jwt_required
-def config_reserve():
+def config_create():
     try:
         json_schema_manager.validate(request.json, "config_create.json")
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         config = ConfigCreationService(
             current_user, dig(request.json, "data/attributes/name")
-        ).reserve(True)
+        ).create(True)
 
         return json_api(config, ConfigSchema), 200
     except ValidationError:

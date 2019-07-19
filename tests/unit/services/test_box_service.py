@@ -24,6 +24,5 @@ class TestBoxCreationService(object):
                 BoxCreationService(
                     current_user=current_free_user,
                     config_id=conf.id,
-                    port_type=["http"],
                     ssh_key="",
                 ).create()

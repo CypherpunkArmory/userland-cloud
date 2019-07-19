@@ -10,30 +10,7 @@ class ConfigCreationService:
         self.current_user = current_user
         self.config_name = config_name
 
-    def over_config_limits(self):
-        num_reserved_config = self.current_user.configs.filter_by(
-            reserved=True
-        ).count()
-        if num_reserved_config >= self.current_user.limits().reserved_config:
-            return True
-        return False
-
-    def get_unused_config(self):
-        while True:
-            self.config_name = momblish.word(10).lower()
-            try:
-                config = self.reserve(reserve=False)
-                break
-            except ConfigTaken:
-                continue
-        return config
-
-    def reserve(self, reserve=True):
-        if reserve:
-            if self.over_config_limits():
-                raise ConfigLimitReached(
-                    "Maximum number of reserved configs reached"
-                )
+    def create(self):
         config_exist = (
             db.session.query(Config.name)
             .filter_by(name=self.config_name)
@@ -46,8 +23,6 @@ class ConfigCreationService:
         config = Config(
             user_id=self.current_user.id,
             name=self.config_name,
-            reserved=reserve,
-            in_use=False,
         )
 
         db.session.add(config)
@@ -62,7 +37,6 @@ class ConfigDeletionService:
         self.config = config
 
     def release(self) -> None:
-        if self.config.in_use:
-            raise ConfigInUse("Config is in use")
+        
         db.session.delete(self.config)
         db.session.flush()

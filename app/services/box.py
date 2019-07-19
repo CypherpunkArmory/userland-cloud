@@ -29,12 +29,10 @@ class BoxCreationService:
         self,
         current_user: User,
         config_id: Optional[int],
-        port_type: list,
         ssh_key: str,
         session_length: int = 30 # minutes
     ):
 
-        self.port_type = port_type
         self.ssh_key = ssh_key
         self.current_user = current_user
         self.session_end_time = datetime.utcnow() + timedelta(minutes=session_length)
@@ -45,7 +43,7 @@ class BoxCreationService:
         else:
             self.config = ConfigCreationService(
                 self.current_user
-            ).get_unused_config()
+            ).create()
 
         # We need to do this each time so each if a nomad service goes down
         # it doesnt affect web api
@@ -67,11 +65,9 @@ class BoxCreationService:
         except nomad.api.exceptions.BaseNomadException:
             raise BoxError("Failed to create box")
 
-        self.config.in_use = True
 
         box = Box(
             config_id=self.config.id,
-            port=self.port_type,
             job_id=job_id,
             ssh_port=ssh_port,
             ip_address=ip_address,
@@ -96,8 +92,6 @@ class BoxCreationService:
     def check_config_permissions(self) -> None:
         if self.config.user != self.current_user:
             raise AccessDenied("You do not own this config")
-        elif self.config.in_use:
-            raise ConfigInUse("Config is in use")
         elif self.config.user == self.current_user:
             pass
 
@@ -165,13 +159,7 @@ class BoxDeletionService:
         self.nomad_client = nomad.Nomad(discover_service("nomad").ip)
 
     def delete(self):
-        if self.config.reserved:
-            self.config.in_use = False
-            db.session.add(self.config)
-            db.session.delete(self.box)
-            db.session.flush()
-        else:
-            db.session.delete(self.box)
-            db.session.delete(self.config)
-            db.session.flush()
+        db.session.delete(self.box)
+        db.session.delete(self.config)
+        db.session.flush()
         cleanup_old_nomad_box.queue(self.job_id, timeout=60000)

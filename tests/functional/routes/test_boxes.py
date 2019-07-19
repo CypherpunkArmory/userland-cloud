@@ -60,7 +60,7 @@ class TestBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {"port": ["http"], "sshKey": "i-am-lousy-public-key"},
+                    "attributes": {"sshKey": "i-am-lousy-public-key"},
                 }
             },
         )
@@ -73,7 +73,7 @@ class TestBoxes(object):
     def test_box_open_with_config(self, client, current_user, session):
         """User can open a box when providing a config they own"""
 
-        conf = config.ReservedConfigFactory(user=current_user)
+        conf = config.ConfigFactory(user=current_user)
         session.add(conf)
         session.flush()
 
@@ -83,7 +83,6 @@ class TestBoxes(object):
                 "data": {
                     "type": "box",
                     "attributes": {
-                        "port": ["http"],
                         "sshKey": "i-am-a-lousy-public-key",
                     },
                     "relationships": {
@@ -101,7 +100,7 @@ class TestBoxes(object):
     def test_box_open_unowned_config(self, client, current_user, session):
         """User can not open a box if they dont own the config"""
 
-        conf = config.ReservedConfigFactory()
+        conf = config.ConfigFactory()
         session.add(conf)
         session.flush()
 
@@ -110,7 +109,7 @@ class TestBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {"port": ["http"], "sshKey": "i-am-a-lousy-key"},
+                    "attributes": {"sshKey": "i-am-a-lousy-key"},
                     "relationships": {
                         "config": {"data": {"type": "config", "id": str(conf.id)}}
                     },
@@ -129,7 +128,7 @@ class TestBoxes(object):
         session.add(conf)
         session.flush()
         test_box = BoxCreationService(
-            current_user, conf.id, ["http"], "i-am-a-lousy-key"
+            current_user, conf.id, "i-am-a-lousy-key"
         ).create()
         session.add(test_box)
         session.flush()
@@ -148,10 +147,10 @@ class TestBoxes(object):
     def test_box_filter_by_config_name(self, client, session, current_user):
         """Can filter a config using JSON-API compliant filters"""
 
-        conf1 = config.ReservedConfigFactory(
+        conf1 = config.ConfigFactory(
             user=current_user, name="sub-sandwich"
         )
-        conf2 = config.ReservedConfigFactory(
+        conf2 = config.ConfigFactory(
             user=current_user, name="subscription"
         )
 
@@ -193,7 +192,7 @@ class TestFailedBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {"port": ["http"], "sshKey": "i-am-lousy-public-key"},
+                    "attributes": {"sshKey": "i-am-lousy-public-key"},
                 }
             },
         )
@@ -226,7 +225,7 @@ class TestFailedBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {"port": ["http"], "sshKey": "i-am-lousy-public-key"},
+                    "attributes": {"sshKey": "i-am-lousy-public-key"},
                 }
             },
         )
@@ -263,7 +262,7 @@ class TestFailedBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {"port": ["http"], "sshKey": "i-am-lousy-public-key"},
+                    "attributes": {"sshKey": "i-am-lousy-public-key"},
                 }
             },
         )

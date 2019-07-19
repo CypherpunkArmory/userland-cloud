@@ -17,8 +17,6 @@ class UserLimit(NamedTuple):
 class Config(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, nullable=False, unique=True)
-    reserved = db.Column(db.Boolean)
-    in_use = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="configs", lazy="joined")
 
@@ -98,7 +96,6 @@ class User(db.Model):  # type: ignore
 
 class Box(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
-    port = db.Column(types.ARRAY(types.String()))
     config_id = db.Column(db.Integer, db.ForeignKey("config.id"))
     ssh_port = db.Column(db.Integer)
     job_id = db.Column(db.String(64))

@@ -28,7 +28,7 @@ def expire_running_box(current_user, box):
 
 
 def del_box_nomad(nomad_client, job_id):
-    nomad_client.job.deregister_job(job_id)
+    nomad_client.job.deregister_job(job_id, purge=True)
 
 
 @Q.job(func_or_queue="nomad", timeout=100000)

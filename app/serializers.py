@@ -32,8 +32,6 @@ class ConfigSchema(Schema):
 
     id = fields.Str()
     name = fields.Str()
-    in_use = fields.Boolean()
-    reserved = fields.Boolean()
 
 
 class UserSchema(Schema):

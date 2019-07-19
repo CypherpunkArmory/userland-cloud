@@ -14,29 +14,5 @@ class ConfigFactory(Factory):
         model = Config
 
     user = SubFactory(UserFactory)
-    in_use = False
-    reserved = False
     name = fuzzy.FuzzyText()
     id = fuzzy.FuzzyInteger(1, 213)
-
-
-@register
-class ReservedConfigFactory(ConfigFactory):
-    reserved = True
-
-
-@register
-class InuseConfigFactory(ConfigFactory):
-    in_use = True
-
-
-@register
-class InuseReservedConfigFactory(ConfigFactory):
-    in_use = True
-    reserved = True
-
-
-@register
-class InuseUnreservedConfigFactory(ConfigFactory):
-    in_use = True
-    reserved = False

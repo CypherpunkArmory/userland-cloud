@@ -60,9 +60,7 @@ def config_create():
 @jwt_required
 def config_release(config_id):
     current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
-    config = Config.query.filter_by(
-        user=current_user, id=config_id
-    ).first_or_404()
+    config = Config.query.filter_by(user=current_user, id=config_id).first_or_404()
 
     try:
         ConfigDeletionService(current_user, config).release()
@@ -80,8 +78,6 @@ def get_config(config_id):
     Stop a currently running config
     """
     current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
-    config = Config.query.filter_by(
-        user=current_user, id=config_id
-    ).first_or_404()
+    config = Config.query.filter_by(user=current_user, id=config_id).first_or_404()
 
     return json_api(config, ConfigSchema)

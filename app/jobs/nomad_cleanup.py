@@ -9,10 +9,7 @@ from app.models import Box
 
 @Q.job(func_or_queue="nomad", timeout=60000)
 def cleanup_old_nomad_box(job_id):
-    if os.getenv("FLASK_ENV") == "production":
-        nomad_client = nomad.Nomad(discover_service("nomad").ip)
-    else:
-        nomad_client = nomad.Nomad(host=os.getenv("SEA_HOST", "0.0.0.0"))
+    nomad_client = nomad.Nomad(discover_service("nomad").ip)
 
     try:
         del_box_nomad(nomad_client, job_id)
@@ -24,6 +21,7 @@ def cleanup_old_nomad_box(job_id):
 @Q.job(func_or_queue="nomad", timeout=60000)
 def expire_running_box(current_user, box):
     from app.services.box import BoxDeletionService
+
     BoxDeletionService(current_user=current_user, box=box).delete()
 
 
@@ -33,10 +31,7 @@ def del_box_nomad(nomad_client, job_id):
 
 @Q.job(func_or_queue="nomad", timeout=100000)
 def check_all_boxes():
-    if os.getenv("FLASK_ENV") == "production":
-        nomad_client = nomad.Nomad(discover_service("nomad").ip)
-    else:
-        nomad_client = nomad.Nomad(host=os.getenv("SEA_HOST", "0.0.0.0"))
+    nomad_client = nomad.Nomad(discover_service("nomad").ip)
     deployments = nomad_client.job.get_deployments("ssh-client")
 
     for deployment in deployments:

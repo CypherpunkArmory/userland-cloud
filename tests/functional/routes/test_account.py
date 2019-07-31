@@ -328,9 +328,7 @@ class TestAccount(object):
         assert res.status_code is 200
         assert user is None
 
-    def test_account_delete_account_with_config(
-        self, client, current_user, session
-    ):
+    def test_account_delete_account_with_config(self, client, current_user, session):
         """DELETE to /account url succeeds and associated configs no longer exists"""
         conf1 = config.ConfigFactory(user=current_user, name="sub-bass")
         session.add(conf1)

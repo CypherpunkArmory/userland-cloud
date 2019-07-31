@@ -115,8 +115,8 @@ tasks:
     prefix: 'clean'
     desc: Shutdown All Running Boxes and Destroy Unreserved Configs
     cmds:
-      - nomad job status | grep "ssh-client/dispatch" | cut -d ' ' -f1 | xargs -I '{}' sh -lc 'yes | nomad job stop --purge {}'
-      - echo "delete from box; delete from config where reserved is false" | psql -U postgres -h 0.0.0.0 -d userland_development
+      - nomad job status | grep "box-client" | cut -d ' ' -f1 | xargs -I '{}' sh -lc 'yes | nomad job stop --purge {}'
+      #- echo "delete from box; delete from config where reserved is false" | psql -U postgres -h 0.0.0.0 -d userland_development
 
   add_host:
     prefix: 'add_host'

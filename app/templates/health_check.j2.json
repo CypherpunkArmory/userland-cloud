@@ -1,0 +1,30 @@
+ {
+    "AddressMode": "auto",
+    "CanaryTags": null,
+    "CheckRestart": null,
+    "Checks": [
+        {
+        "AddressMode": "driver",
+        "Args": null,
+        "CheckRestart": null,
+        "Command": "",
+        "GRPCService": "",
+        "GRPCUseTLS": false,
+        "Header": null,
+        "Id": "",
+        "InitialStatus": "",
+        "Interval": 10000000000,
+        "Method": "",
+        "Label": "ssh-{{box_name}}-up",
+        "Path": "",
+        "PortLabel": "ssh",
+        "Protocol": "",
+        "TLSSkipVerify": false,
+        "Timeout": 2000000000,
+        "Type": "tcp"
+        }
+    ],
+    "Id": "",
+    "Name": "ssh-{{box_name}}",
+    "PortLabel": "{{port}}"
+}

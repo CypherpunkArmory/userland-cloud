@@ -1,0 +1,146 @@
+{
+  "Job": {
+    "Affinities": null,
+    "AllAtOnce": false,
+    "Constraints": null,
+    "CreateIndex": 81,
+    "Datacenters": [
+      "city"
+    ],
+    "Dispatched": false,
+    "ID": "box-client-{{box_name}}",
+    "JobModifyIndex": 81,
+    "Meta": null,
+    "Migrate": null,
+    "ModifyIndex": 83,
+    "Name": "box-client-{{box_name}}",
+    "Namespace": "default",
+    "ParameterizedJob": null,
+    "ParentID": "",
+    "Payload": null,
+    "Periodic": null,
+    "Priority": 50,
+    "Region": "global",
+    "Reschedule": null,
+    "Spreads": null,
+    "Stable": false,
+    "Status": null,
+    "StatusDescription": "",
+    "Stop": false,
+    "SubmitTime": 1559239760878108100,
+    "TaskGroups": [
+      {
+        "Affinities": null,
+        "Constraints": null,
+        "Count": 1,
+        "EphemeralDisk": {
+          "Migrate": false,
+          "SizeMB": 300,
+          "Sticky": false
+        },
+        "Meta": null,
+        "Migrate": {
+          "HealthCheck": "checks",
+          "HealthyDeadline": 300000000000,
+          "MaxParallel": 1,
+          "MinHealthyTime": 10000000000
+        },
+        "Name": "holepunch",
+        "ReschedulePolicy": {
+          "Attempts": 0,
+          "Delay": 30000000000,
+          "DelayFunction": "exponential",
+          "Interval": 0,
+          "MaxDelay": 3600000000000,
+          "Unlimited": true
+        },
+        "RestartPolicy": {
+          "Attempts": 2,
+          "Delay": 15000000000,
+          "Interval": 1800000000000,
+          "Mode": "fail"
+        },
+        "Spreads": null,
+        "Tasks": [
+          {
+            "Affinities": null,
+            "Artifacts": null,
+            "Config": {
+              "image": "cypherpunkarmory/box:develop",
+              "labels": [
+                {
+                  "io.userland.box": "{{box_name}}"
+                }
+              ],
+              "port_map": [
+                {
+                  "ssh": 22
+                }
+              ]
+            },
+            "Constraints": null,
+            "DispatchPayload": null,
+            "Driver": "docker",
+            "Env": {
+              "BANDWIDTH": "{{bandwidth}}",
+              "SSH_KEY": "{{ssh_key}}",
+              "TIME_LIMIT":"{{time_limit}}"
+            },
+            "KillSignal": "",
+            "KillTimeout": 5000000000,
+            "Leader": false,
+            "LogConfig": {
+              "MaxFileSizeMB": 10,
+              "MaxFiles": 10
+            },
+            "Meta": null,
+            "Name": "box",
+            "Resources": {
+              "CPU": 200,
+              "Devices": null,
+              "DiskMB": 0,
+              "IOPS": 0,
+              "MemoryMB": 200,
+              "Networks": [
+                {
+                  "CIDR": "",
+                  "Device": "",
+                  "DynamicPorts": [
+                    {
+                      "Label": "ssh",
+                      "Value": 0
+                    }
+                  ],
+                  "IP": "",
+                  "MBits": 1,
+                  "ReservedPorts": null
+                }
+              ]
+            },
+            "Services": [
+             {% include "health_check.j2.json" %}
+            ],
+            "ShutdownDelay": 0,
+            "Templates": null,
+            "User": "",
+            "Vault": null
+          }
+        ],
+        "Update": null
+      }
+    ],
+    "Type": "service",
+    "Update": {
+      "AutoRevert": false,
+      "Canary": 0,
+      "HealthCheck": "",
+      "HealthyDeadline": 0,
+      "MaxParallel": 0,
+      "MinHealthyTime": 0,
+      "ProgressDeadline": 0,
+      "Stagger": 0
+    },
+    "VaultToken": "",
+    "Version": 0
+  }
+}

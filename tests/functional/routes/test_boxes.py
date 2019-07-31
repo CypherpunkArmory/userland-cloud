@@ -82,9 +82,7 @@ class TestBoxes(object):
             json={
                 "data": {
                     "type": "box",
-                    "attributes": {
-                        "sshKey": "i-am-a-lousy-public-key",
-                    },
+                    "attributes": {"sshKey": "i-am-a-lousy-public-key"},
                     "relationships": {
                         "config": {"data": {"type": "config", "id": str(conf.id)}}
                     },
@@ -147,12 +145,8 @@ class TestBoxes(object):
     def test_box_filter_by_config_name(self, client, session, current_user):
         """Can filter a config using JSON-API compliant filters"""
 
-        conf1 = config.ConfigFactory(
-            user=current_user, name="sub-sandwich"
-        )
-        conf2 = config.ConfigFactory(
-            user=current_user, name="subscription"
-        )
+        conf1 = config.ConfigFactory(user=current_user, name="sub-sandwich")
+        conf2 = config.ConfigFactory(user=current_user, name="subscription")
 
         test_box1 = box.BoxFactory(config=conf1)
         test_box2 = box.BoxFactory(config=conf2)
@@ -168,9 +162,7 @@ class TestBoxes(object):
 
 
 class TestFailedBoxes(object):
-    @mock.patch.object(
-        BoxCreationService, "create_box_nomad", return_value=[1, []]
-    )
+    @mock.patch.object(BoxCreationService, "create_box_nomad", return_value=[1, []])
     @mock.patch.object(
         BoxCreationService,
         "get_box_details",
@@ -179,12 +171,7 @@ class TestFailedBoxes(object):
     )
     @mock.patch.object(BoxDeletionService, "delete")
     def test_box_delete_on_fail_deploy(
-        self,
-        mock_del_box,
-        mock_box_details,
-        mock_create_box,
-        client,
-        current_user,
+        self, mock_del_box, mock_box_details, mock_create_box, client, current_user
     ):
         """Box delete is called when provisioning it fails"""
         res = client.post(
@@ -236,9 +223,7 @@ class TestFailedBoxes(object):
         assert not mock_del_box_from_db.called
         assert not mock_del_box_job.called
 
-    @mock.patch.object(
-        BoxCreationService, "create_box_nomad", return_value=("1", [])
-    )
+    @mock.patch.object(BoxCreationService, "create_box_nomad", return_value=("1", []))
     @mock.patch.object(
         BoxCreationService,
         "get_box_details",

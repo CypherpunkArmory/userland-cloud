@@ -56,9 +56,7 @@ def start_box() -> Tuple[Response, int]:
 
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         try:
-            box_info = BoxCreationService(
-                current_user, config_id, ssh_key
-            ).create()
+            box_info = BoxCreationService(current_user, config_id, ssh_key).create()
         except ConfigLimitReached:
             return json_api(ConfigLimitReached, ErrorSchema), 403
         except BoxLimitReached:

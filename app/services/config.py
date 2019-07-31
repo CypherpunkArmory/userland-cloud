@@ -12,18 +12,13 @@ class ConfigCreationService:
 
     def create(self):
         config_exist = (
-            db.session.query(Config.name)
-            .filter_by(name=self.config_name)
-            .scalar()
+            db.session.query(Config.name).filter_by(name=self.config_name).scalar()
         )
 
         if config_exist:
             raise ConfigTaken("Requested Config is already reserved")
 
-        config = Config(
-            user_id=self.current_user.id,
-            name=self.config_name,
-        )
+        config = Config(user_id=self.current_user.id, name=self.config_name)
 
         db.session.add(config)
         db.session.flush()
@@ -37,6 +32,6 @@ class ConfigDeletionService:
         self.config = config
 
     def release(self) -> None:
-        
+
         db.session.delete(self.config)
         db.session.flush()

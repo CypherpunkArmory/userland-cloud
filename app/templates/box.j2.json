@@ -45,7 +45,7 @@
           "MaxParallel": 1,
           "MinHealthyTime": 10000000000
         },
-        "Name": "holepunch",
+        "Name": "userland",
         "ReschedulePolicy": {
           "Attempts": 0,
           "Delay": 30000000000,
@@ -66,7 +66,7 @@
             "Affinities": null,
             "Artifacts": null,
             "Config": {
-              "image": "cypherpunkarmory/box:develop",
+              "image": "cypherpunkarmory/box:0.0.1",
               "labels": [
                 {
                   "io.userland.box": "{{box_name}}"

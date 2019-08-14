@@ -229,6 +229,8 @@ tasks:
     status:
       - "[ '{{.HOOK}}' == 'none' ]"
     cmds:
+      - echo {{.HOOK}}
+      - echo {{.HP_TAG}}
       - terraform workspace select {{.WORKSPACE}}
       - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version={{.HP_TAG}}" -out "hookfile"
       - if [ "$(terraform show hookfile)" = "This plan does nothing." ]; then
@@ -256,14 +258,6 @@ tasks:
             echo $red;
           fi
           
-        // BOX_TAG:
-        // sh: |
-        //   if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-        //     git describe --abbrev=0 --tags --match "ssh-*" | awk -F'[.]' '{gsub("ssh-",""); print $1"."$2"."$3}'
-        //   else
-        //     git rev-parse --abbrev-ref HEAD
-        //   fi
-
           echo -e "$alloc"
           check_count=$((check_count+1))
           test $check_count -gt 160 && exit 1
@@ -306,7 +300,7 @@ tasks:
           ROOT_TOKEN: "{{.ROOT_TOKEN}}"
           ANSIBLE_VAULT_PATH: "{{.ANSIBLE_VAULT_PATH}}"
           WORKSPACE: "{{.WORKSPACE}}"
-          HOOK: "{{.HOOK}} pre"
+          HOOK: "pre"
       - terraform workspace select {{.WORKSPACE}}
       - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
       - terraform apply "planfile"
@@ -351,4 +345,4 @@ tasks:
           ROOT_TOKEN: "{{.ROOT_TOKEN}}"
           ANSIBLE_VAULT_PATH: "{{.ANSIBLE_VAULT_PATH}}"
           WORKSPACE: "{{.WORKSPACE}}"
-          HOOK: "{{.HOOK}} post"
+          HOOK: "post"

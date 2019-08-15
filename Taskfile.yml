@@ -209,7 +209,7 @@ tasks:
     preconditions: *x-deploy-pre
     cmds:
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
+      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version=0.0.1" -out "planfile"
       - terraform apply "planfile"
 
   cluster-exec:
@@ -231,15 +231,15 @@ tasks:
     cmds:
       - echo {{.HOOK}}
       - echo {{.HP_TAG}}
+      - echo {{.NOMAD_ADDR}} 
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version={{.HP_TAG}}" -out "hookfile"
+      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version=0.0.1" -out "hookfile"
       - if [ "$(terraform show hookfile)" = "This plan does nothing." ]; then
           echo "No hook to execute";
           exit 0;
         fi
       - terraform apply "hookfile"
       - |
-        export NOMAD_ADDR={{.NOMAD_ADDR}}
         echo "Waiting for hook to finish."
         nomad job status userland-hook | sed -n '/^Allocations/,$p' | sed -n '1!p'
         green=$(tput setaf 2)

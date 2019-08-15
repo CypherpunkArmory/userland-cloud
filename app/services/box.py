@@ -25,12 +25,12 @@ class BoxCreationService:
         current_user: User,
         config_id: Optional[int],
         ssh_key: str,
-        session_length: int = 30,  # minutes
+        session_length: int = 1800 # seconds
     ):
 
         self.ssh_key = ssh_key
         self.current_user = current_user
-        self.session_end_time = datetime.utcnow() + timedelta(minutes=session_length)
+        self.session_end_time = datetime.utcnow() + timedelta(seconds=session_length)
         self.session_length = session_length
 
         if config_id:

@@ -16,7 +16,7 @@ class UserLimit(NamedTuple):
 
 class Config(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), index=True, nullable=False, unique=True)
+    name = db.Column(db.String(64), index=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="configs", lazy="joined")
 

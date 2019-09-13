@@ -73,7 +73,7 @@ class BoxCreationService:
         db.session.flush()
 
         expire_running_box.schedule(
-            timedelta(minutes=self.session_length), self.current_user, box, timeout=30
+            timedelta(seconds=self.session_length), self.current_user, box, timeout=30
         )
 
         return box

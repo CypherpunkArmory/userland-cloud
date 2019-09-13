@@ -72,7 +72,7 @@
             "Affinities": null,
             "Artifacts": null,
             "Config": {
-              "image": "cypherpunkarmory/box:develop",
+              "image": "cypherpunkarmory/box:0.0.1",
               "labels": [
                 {
                   "io.userland.box": "{{box_name}}"

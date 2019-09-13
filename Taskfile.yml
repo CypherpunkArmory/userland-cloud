@@ -208,7 +208,7 @@ tasks:
     cmds:
       - (terraform taint nomad_job.userland || exit 0)
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version=0.0.1" -out "planfile"
+      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.ULA_TAG}}" -out "planfile"
       - terraform apply "planfile"
 
   cluster-exec:

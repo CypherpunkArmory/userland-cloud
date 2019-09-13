@@ -209,7 +209,7 @@ tasks:
     preconditions: *x-deploy-pre
     cmds:
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version=0.0.1" -out "planfile"
+      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version=0.0.4" -out "planfile"
       - terraform apply "planfile"
 
   cluster-exec:
@@ -233,7 +233,7 @@ tasks:
       - echo {{.HP_TAG}}
       - echo {{.NOMAD_ADDR}} 
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version=0.0.1" -out "hookfile"
+      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version=0.0.4" -out "hookfile"
       - if [ "$(terraform show hookfile)" = "This plan does nothing." ]; then
           echo "No hook to execute";
           exit 0;

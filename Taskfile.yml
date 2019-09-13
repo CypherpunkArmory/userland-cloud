@@ -6,10 +6,10 @@ output: prefixed
 
 x-deploy-pre: &x-deploy-pre
   - sh: test -n "{{.ANSIBLE_VAULT_PATH}}"
-    msg: "ANSIBLE_VAULT_PATH must be set"
+    msg: "ANSIBLE_VAULT_PATH must be set - it is currently {{.ANSIBLE_VAULT_PATH}}"
   - sh: "[ '{{.WORKSPACE}}' != '<no value>' ]"
     msg: "WORKSPACE must be set"
-  - sh: "[ \"$(nomad --version)\" = 'Nomad v0.9.1' ]"
+  - sh: "[ \"$(nomad --version)\" = 'Nomad v0.9.5' ]"
   - sh: host vault.service.city.consul
     msg: "Could not reach vault, are you on the VPN?"
   - NOMAD_ADDR=http://nomad:4646 nomad status
@@ -24,21 +24,21 @@ x-deploy-vars: &x-deploy-vars
   # If you are on master, grab the tag that points at master and deploy that
   # one - if you are on a branch - grab the tag with your branch name and
   # deploy that.
-  HP_TAG:
+  ULA_TAG:
     sh: |
       if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
         git describe --abbrev=0 --tags --match "userland-*" | awk -F'[.]' '{gsub("userland-",""); print $1"."$2"."$3}'
-      elif [ "{{.HP_TAG}}" != "<no value>" ]; then
-        echo "{{.HP_TAG}}";
+      elif [ "{{.ULA_TAG}}" != "<no value>" ]; then
+        echo "{{.ULA_TAG}}";
       else
         git rev-parse --abbrev-ref HEAD
       fi
-  SSH_TAG:
+  BOX_TAG:
     sh: |
       if [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-        git describe --abbrev=0 --tags --match "ssh-*" | awk -F'[.]' '{gsub("ssh-",""); print $1"."$2"."$3}'
-      elif [ "{{.SSH_TAG}}" != "<no value>" ]; then
-        echo "{{.SSH_TAG}}";
+        git describe --abbrev=0 --tags --match "box-*" | awk -F'[.]' '{gsub("box-",""); print $1"."$2"."$3}'
+      elif [ "{{.BOX_TAG}}" != "<no value>" ]; then
+        echo "{{.BOX_TAG}}";
       else
         git rev-parse --abbrev-ref HEAD
       fi
@@ -46,13 +46,13 @@ x-deploy-vars: &x-deploy-vars
 x-release-vars: &x-release-vars
   VER: '{{ default "next" .VER }}'
   RELEASED_TAG:
-    sh: git describe --abbrev=0 --tags --match "{{.KIND}}*"
+    sh: git describe --abbrev=0 --tags --match "{{.KIND | default ""}}*"
   SOURCE_COMMIT:
     sh: git rev-parse HEAD
   NEXT_TAG:
     sh: |
       if [ "{{.VER}}" = "next" ] && [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
-        git describe --abbrev=0 --tags --match "{{.KIND}}*" | awk -F'[.]' '{gsub("{{.KIND}}-",""); print $1"."$2"."$3+1}';
+        git describe --abbrev=0 --tags --match "{{.KIND}}-*" | awk -F'[.]' '{gsub("{{.KIND}}-",""); print $1"."$2"."$3+1}';
       elif [ "{{.VER}}" != "next" ] && [ "$(git rev-parse --abbrev-ref HEAD)" = "master" ]; then
         echo "{{.VER}}";
       else
@@ -87,7 +87,7 @@ tasks:
     cmds:
       - docker-compose stop db
       - docker-compose rm -f db
-      - docker volume rm private-holes_postgres || :
+      - docker volume rm userland_postgres || :
       - docker-compose up -d db
       - sleep 3
       - docker-compose exec db createdb -U postgres userland_development
@@ -105,7 +105,7 @@ tasks:
 
   setup_box:
     prefix: 'setup_box'
-    desc: Build a development SSH container and schedule it on the local nomad
+    desc: Build a development BOX container and schedule it on the local nomad
     cmds:
       - docker build -f Dockerfile.box -t cypherpunkarmory/box:develop .
       - docker-compose up -d nomad
@@ -140,9 +140,9 @@ tasks:
 
   release-box:
     prefix: 'release-box'
-    desc: Push an SSH container release to Dockerhub
+    desc: Push an BOX container release to Dockerhub
     vars:
-      KIND: "ssh"
+      KIND: "box"
       <<: *x-release-vars
     sources:
       - ./Dockerfile.box
@@ -152,7 +152,7 @@ tasks:
         msg: "This commit is already tagged for box"
     status: *x-release-status
     cmds:
-      - echo "Updating SSH from {{.RELEASED_TAG}} to box-{{.NEXT_TAG}}"
+      - echo "Updating BOX from {{.RELEASED_TAG}} to box-{{.NEXT_TAG}}"
       - docker build -f Dockerfile.box -t cypherpunkarmory/box:{{.NEXT_TAG}} .
       - docker push cypherpunkarmory/box:{{.NEXT_TAG}}
       - *x-cmd-tag-if-master
@@ -203,13 +203,12 @@ tasks:
           ROOT_TOKEN: '{{.ROOT_TOKEN}}'
           ANSIBLE_VAULT_PATH: '{{.ANSIBLE_VAULT_PATH}}'
           WORKSPACE: '{{.WORKSPACE}}'
-    status:
-      - nomad job status | grep "userland"
     vars: *x-deploy-vars
     preconditions: *x-deploy-pre
     cmds:
+      - (terraform taint nomad_job.userland || exit 0)
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "ssh_deploy_version={{.SSH_TAG}}" -var "userland_deploy_version=0.0.1" -out "planfile"
+      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version=0.0.1" -out "planfile"
       - terraform apply "planfile"
 
   cluster-exec:
@@ -230,16 +229,17 @@ tasks:
       - "[ '{{.HOOK}}' == 'none' ]"
     cmds:
       - echo {{.HOOK}}
-      - echo {{.HP_TAG}}
-      - echo {{.NOMAD_ADDR}} 
+      - echo {{.ULA_TAG}}
+      - echo {{.NOMAD_ADDR}}
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version=0.0.1" -out "hookfile"
+      - terraform plan -target nomad_job.userland_hook -var "hook={{.HOOK}}" -var "userland_deploy_version={{.ULA_TAG}}" -out "hookfile"
       - if [ "$(terraform show hookfile)" = "This plan does nothing." ]; then
           echo "No hook to execute";
           exit 0;
         fi
       - terraform apply "hookfile"
       - |
+        export NOMAD_ADDR={{.NOMAD_ADDR}}
         echo "Waiting for hook to finish."
         nomad job status userland-hook | sed -n '/^Allocations/,$p' | sed -n '1!p'
         green=$(tput setaf 2)
@@ -257,7 +257,7 @@ tasks:
           if [ "$complete" = "failed" ]; then
             echo $red;
           fi
-          
+
           echo -e "$alloc"
           check_count=$((check_count+1))
           test $check_count -gt 160 && exit 1
@@ -270,8 +270,8 @@ tasks:
         echo "--- Task Stderr ---"
         nomad alloc logs --stderr $(echo "$alloc"  | awk '{ print $1 }')
         echo -e "\n\n"
-      - nomad job stop -purge userland-hook
-      - terraform destroy --auto-approve -target nomad_job.userland_hook
+      - NOMAD_ADDR={{.NOMAD_ADDR}} nomad job stop -purge holepunch-hook
+      - terraform destroy --auto-approve -target nomad_job.holepunch_hook
       - rm hookfile
 
   deploy:
@@ -284,7 +284,7 @@ tasks:
           KIND: "userland"
       - task: release
         vars:
-          KIND: "ssh"
+          KIND: "box"
       - task: vault-login
         vars:
           ROOT_TOKEN: '{{.ROOT_TOKEN}}'
@@ -295,54 +295,20 @@ tasks:
     cmds:
       - task: cluster-exec
         vars:
-          HP_TAG: "{{.HP_TAG}}"
+          ULA_TAG: "{{.ULA_TAG}}"
           BOX_TAG: "{{.BOX_TAG}}"
           ROOT_TOKEN: "{{.ROOT_TOKEN}}"
           ANSIBLE_VAULT_PATH: "{{.ANSIBLE_VAULT_PATH}}"
           WORKSPACE: "{{.WORKSPACE}}"
-          HOOK: "pre"
+          HOOK: "{{.HOOK}} pre"
       - terraform workspace select {{.WORKSPACE}}
-      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.HP_TAG}}" -out "planfile"
+      - terraform plan -var "box_deploy_version={{.BOX_TAG}}" -var "userland_deploy_version={{.ULA_TAG}}" -out "planfile"
       - terraform apply "planfile"
-      - sleep 1
-      - |
-        export NOMAD_ADDR={{.NOMAD_ADDR}}
-        echo "Waiting for deploy to green."
-        deployment=$(nomad deployment list | grep "running" | awk '{ print $1 }')
-        green=$(tput setaf 2)
-        service_complete="0"
-        worker_complete="0"
-        check_count=0
-        while [ $service_complete = "0" ] || [ $worker_complete = "0" ]; do
-
-          echo $(tput sgr0)
-          service_status=$(nomad deployment status $deployment | grep "^services")
-          service_complete=$(echo -e "$service_status" | awk '{if($4==$7){print "1"}else{print "0"}}')
-          if [ $service_complete == "1" ]; then
-            echo $green
-          fi
-          echo -e "$service_status $(tput sgr0)"
-
-          worker_status=$(nomad deployment status $deployment | grep "^workers")
-          worker_complete=$(echo -e "$worker_status" | awk '{if($4==$7){print "1"}else{print "0"}}')
-          if [ $worker_complete == "1" ]; then
-            echo $green
-          fi
-          echo -e "$worker_status $(tput sgr0)"
-
-          check_count=$((check_count+1))
-          test $check_count -gt 160 && exit 1
-          awk "BEGIN { while (c++ < $check_count) printf \"=\" }" && echo
-          sleep 1
-        done
-        echo $(tput sgr0)
-        nomad deployment promote $deployment
-      - rm planfile
       - task: cluster-exec
         vars:
-          HP_TAG: "{{.HP_TAG}}"
-          SSH_TAG: "{{.SSH_TAG}}"
+          ULA_TAG: "{{.ULA_TAG}}"
+          BOX_TAG: "{{.BOX_TAG}}"
           ROOT_TOKEN: "{{.ROOT_TOKEN}}"
           ANSIBLE_VAULT_PATH: "{{.ANSIBLE_VAULT_PATH}}"
           WORKSPACE: "{{.WORKSPACE}}"
-          HOOK: "post"
+          HOOK: "{{.HOOK}} post"

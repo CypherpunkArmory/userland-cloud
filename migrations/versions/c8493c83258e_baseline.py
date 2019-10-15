@@ -32,12 +32,12 @@ def upgrade():
     op.create_table(
         "config",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("name", sa.String(length=64), nullable=False, unique=True),
+        sa.Column("name", sa.String(length=64), nullable=False),
         sa.Column("user_id", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(["user_id"], ["user.id"]),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_config_name"), "config", ["name"], unique=True)
+    op.create_index(op.f("ix_config_id"), "config", ["id"], unique=True)
     op.create_table(
         "box",
         sa.Column("id", sa.Integer(), nullable=False),

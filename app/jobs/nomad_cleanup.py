@@ -1,5 +1,6 @@
 import nomad
 from app import Q
+from app import db
 from app.utils.dns import discover_service
 from datetime import timedelta, datetime
 import os
@@ -23,6 +24,7 @@ def expire_running_box(current_user, box):
     from app.services.box import BoxDeletionService
 
     BoxDeletionService(current_user=current_user, box=box).delete()
+    db.session.commit()
 
 
 def del_box_nomad(nomad_client, job_id):

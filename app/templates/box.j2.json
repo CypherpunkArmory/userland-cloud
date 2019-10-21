@@ -2,13 +2,7 @@
   "Job": {
     "Affinities": null,
     "AllAtOnce": false,
-    "Constraints": [
-      {
-        "LTarget": "${meta.app}",
-        "RTarget": "userland",
-        "Operand": "="
-      }
-    ],
+    "Constraints": null,
     "CreateIndex": 81,
     "Datacenters": [
       "city"
@@ -72,7 +66,7 @@
             "Affinities": null,
             "Artifacts": null,
             "Config": {
-              "image": "cypherpunkarmory/box:0.0.1",
+              "image": "{{image}}",
               "labels": [
                 {
                   "io.userland.box": "{{box_name}}"
@@ -102,11 +96,11 @@
             "Meta": null,
             "Name": "box",
             "Resources": {
-              "CPU": 200,
+              "CPU": {{cpu}},
               "Devices": null,
               "DiskMB": 0,
               "IOPS": 0,
-              "MemoryMB": 200,
+              "MemoryMB": {{memory}},
               "Networks": [
                 {
                   "CIDR": "",

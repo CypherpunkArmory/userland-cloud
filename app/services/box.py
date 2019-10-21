@@ -100,6 +100,9 @@ class BoxCreationService:
             box_name="box-" + str(self.config.id),
             bandwidth=str(self.current_user.limits().bandwidth),
             time_limit=self.session_length,
+            image="cypherpunkarmory/box:0.0.1",
+            memory=256,
+            cpu=512,
         )
         self.nomad_client.jobs.request(
             data=new_job, method="post", headers={"Content-Type": "application/json"}

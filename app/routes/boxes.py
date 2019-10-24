@@ -53,7 +53,15 @@ def start_box() -> Tuple[Response, int]:
 
         config_id = dig(request.json, "data/relationships/config/data/id")
         ssh_key = dig(request.json, "data/attributes/sshKey")
-        image = dig(request.json, "data/attributes/image", "cypherpunkarmory/box:0.0.1")
+        image = dig(request.json, "data/attributes/image", "ubuntu")
+
+        #right now there is only one valid choice
+        #in the future there will be multiple choices and customer snapshots
+        #we will want to throw an error in the future for an invalid choice
+        if image == "ubuntu":
+            image = "cypherpunkarmory/box:0.0.1"
+        else:
+            image = "cypherpunkarmory/box:0.0.1"
 
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         try:

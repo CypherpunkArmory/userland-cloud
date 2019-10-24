@@ -8,8 +8,10 @@ from typing import NamedTuple
 
 class UserLimit(NamedTuple):
     box_count: int
+    duration: int
+    memory: int
+    cpu: int
     bandwidth: int
-    time_limit: int
     forwards: int
     reserved_config: int
 
@@ -27,6 +29,9 @@ class Config(db.Model):  # type: ignore
 class Plan(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     box_count = db.Column(db.Integer)
+    duration = db.Column(db.Integer)
+    memory = db.Column(db.Integer)
+    cpu = db.Column(db.Integer)
     bandwidth = db.Column(db.Integer)
     forwards = db.Column(db.Integer)
     reserved_config = db.Column(db.Integer)
@@ -57,8 +62,10 @@ class Plan(db.Model):  # type: ignore
     def limits(self):
         return UserLimit(
             box_count=self.box_count,
+            duration=self.duration,
+            memory=self.memory,
+            cpu=self.cpu,
             bandwidth=self.bandwidth,
-            time_limit=1800,
             forwards=self.forwards,
             reserved_config=self.reserved_config,
         )

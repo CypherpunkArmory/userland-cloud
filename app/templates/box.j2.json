@@ -84,7 +84,7 @@
             "Env": {
               "BANDWIDTH": "{{bandwidth}}",
               "SSH_KEY": "{{ssh_key}}",
-              "TIME_LIMIT":"{{time_limit}}"
+              "TIME_LIMIT":"{{duration}}"
             },
             "KillSignal": "",
             "KillTimeout": 5000000000,

@@ -53,10 +53,11 @@ def start_box() -> Tuple[Response, int]:
 
         config_id = dig(request.json, "data/relationships/config/data/id")
         ssh_key = dig(request.json, "data/attributes/sshKey")
+        image = dig(request.json, "data/attributes/image", "cypherpunkarmory/box:0.0.1")
 
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         try:
-            box_info = BoxCreationService(current_user, config_id, ssh_key).create()
+            box_info = BoxCreationService(current_user, config_id, ssh_key, image).create()
         except ConfigLimitReached:
             return json_api(ConfigLimitReached, ErrorSchema), 403
         except BoxLimitReached:

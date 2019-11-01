@@ -59,9 +59,13 @@ def start_box() -> Tuple[Response, int]:
         #in the future there will be multiple choices and customer snapshots
         #we will want to throw an error in the future for an invalid choice
         if image == "ubuntu":
-            image = "cypherpunkarmory/box:0.0.1"
+            image = "cypherpunkarmory/ubuntu:0.0.1"
+        elif image == "debian":
+            image = "cypherpunkarmory/debian:0.0.1"
+        elif image == "kali":
+            image = "cypherpunkarmory/kali:0.0.1"
         else:
-            image = "cypherpunkarmory/box:0.0.1"
+            image = "cypherpunkarmory/ubuntu:0.0.1"
 
         current_user = User.query.filter_by(uuid=get_jwt_identity()).first_or_404()
         try:

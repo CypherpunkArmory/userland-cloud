@@ -72,7 +72,7 @@
             "Affinities": null,
             "Artifacts": null,
             "Config": {
-              "image": "cypherpunkarmory/box:0.0.1",
+              "image": "{{image}}",
               "labels": [
                 {
                   "io.userland.box": "{{box_name}}"
@@ -90,7 +90,7 @@
             "Env": {
               "BANDWIDTH": "{{bandwidth}}",
               "SSH_KEY": "{{ssh_key}}",
-              "TIME_LIMIT":"{{time_limit}}"
+              "TIME_LIMIT":"{{duration}}"
             },
             "KillSignal": "",
             "KillTimeout": 5000000000,
@@ -102,11 +102,11 @@
             "Meta": null,
             "Name": "box",
             "Resources": {
-              "CPU": 200,
+              "CPU": {{cpu}},
               "Devices": null,
               "DiskMB": 0,
               "IOPS": 0,
-              "MemoryMB": 200,
+              "MemoryMB": {{memory}},
               "Networks": [
                 {
                   "CIDR": "",

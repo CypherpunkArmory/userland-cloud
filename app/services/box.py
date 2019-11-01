@@ -25,13 +25,13 @@ class BoxCreationService:
         current_user: User,
         config_id: Optional[int],
         ssh_key: str,
-        session_length: int = 1800 # seconds
+        image: str,
     ):
 
         self.ssh_key = ssh_key
+        self.image = image 
         self.current_user = current_user
-        self.session_end_time = datetime.utcnow() + timedelta(seconds=session_length)
-        self.session_length = session_length
+        self.session_end_time = datetime.utcnow() + timedelta(seconds=current_user.limits().duration)
 
         if config_id:
             self.config = Config.query.get(config_id)
@@ -73,7 +73,7 @@ class BoxCreationService:
         db.session.flush()
 
         expire_running_box.schedule(
-            timedelta(seconds=self.session_length), self.current_user, box, timeout=30
+            timedelta(seconds=self.current_user.limits().duration), self.current_user, box, timeout=30
         )
 
         return box
@@ -99,7 +99,10 @@ class BoxCreationService:
             ssh_key=stripped_ssh_key,
             box_name="box-" + str(self.config.id),
             bandwidth=str(self.current_user.limits().bandwidth),
-            time_limit=self.session_length,
+            duration=self.current_user.limits().duration,
+            image=self.image,
+            memory=self.current_user.limits().memory,
+            cpu=self.current_user.limits().cpu,
         )
         self.nomad_client.jobs.request(
             data=new_job, method="post", headers={"Content-Type": "application/json"}

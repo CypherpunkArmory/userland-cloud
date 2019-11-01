@@ -1,0 +1,86 @@
+FROM kalilinux/kali-rolling:latest
+
+RUN apt-get update
+
+RUN apt-get install -y openssh-server sudo trickle
+
+RUN mkdir /var/run/sshd
+
+RUN echo "root:userland" | chpasswd
+
+RUN sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+
+RUN mkdir /root/.ssh
+
+# Allow SSH Access and give shell for the userland user
+RUN useradd -m -s /bin/bash userland && \
+  mkdir /home/userland/.ssh && \
+  chown userland:userland /home/userland/.ssh && \
+  chmod 0700 /home/userland/.ssh && \
+  touch /home/userland/.ssh/authorized_keys && \
+  chown userland:userland /home/userland/.ssh/authorized_keys && \
+  chmod 0600 /home/userland/.ssh/authorized_keys && \
+  echo "userland:userland" | chpasswd &&  \
+  usermod -aG sudo userland && \
+  touch /home/userland/.sudo_as_admin_successful
+
+RUN echo '#!/bin/bash\n\
+run_countdown(){\n\
+   if [ ! -f /etc/end_time ]; then\n\
+      return 0;\n\
+   fi\n\
+   END_TIME=`cat /etc/end_time`;\n\
+   while sleep 1;\n\
+   do\n\
+      CURRENT_TIME=`date +%s`;\n\
+      if [ "$CURRENT_TIME" -gt "$END_TIME" ]; then\n\
+         REMAINING_TIME=0;\n\
+      else\n\
+         REMAINING_TIME=$((END_TIME-CURRENT_TIME));\n\
+      fi\n\
+      if [ "$REMAINING_TIME" -gt "600" ]; then\n\
+         COLOR_ON="\e[34m"\n\
+         COLOR_OFF="\e[39m"\n\
+         BLINK_ON=""\n\
+         BLINK_OFF=""\n\
+      elif [ "$REMAINING_TIME" -gt "120" ]; then\n\
+         COLOR_ON="\e[33m"\n\
+         COLOR_OFF="\e[39m"\n\
+         BLINK_ON=""\n\
+         BLINK_OFF=""\n\
+      else\n\
+         COLOR_ON="\e[31m"\n\
+         COLOR_OFF="\e[39m"\n\
+         BLINK_ON="\e[5m"\n\
+         BLINK_OFF="\e[25m"\n\
+      fi\n\
+      tput sc;\n\
+      tput cup 0 $(($(tput cols)-15));\n\
+      FORMATTED_COUNTDOWN=$(printf "%02d:%02d" $((REMAINING_TIME/60)) $((REMAINING_TIME%60)));\n\
+      echo -e "$BLINK_ON$COLOR_ON$FORMATTED_COUNTDOWN Remaining$COLOR_OFF$BLINK_OFF";\n\
+      tput rc;\n\
+   done\n\
+}\n\
+run_countdown &'\
+  >> /etc/profile.d/countdown.sh
+
+RUN chmod +x /etc/profile.d/countdown.sh
+
+RUN echo '#!/bin/sh\n\
+  END_TIME=`date +%s`\n\
+  END_TIME=$((END_TIME+TIME_LIMIT))\n\
+  echo $END_TIME > /etc/end_time\n\
+  echo $SSH_KEY > /home/userland/.ssh/authorized_keys\n\
+  exec trickle -s -u $BANDWIDTH -d $BANDWIDTH /usr/sbin/sshd -D'\
+  >> /usr/bin/run_with_limits.sh
+
+RUN chmod +x /usr/bin/run_with_limits.sh
+
+#Clean up
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+EXPOSE 22
+
+ENTRYPOINT ["/usr/bin/run_with_limits.sh"]

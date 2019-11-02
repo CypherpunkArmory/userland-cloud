@@ -64,6 +64,10 @@ def start_box() -> Tuple[Response, int]:
             image = "cypherpunkarmory/debian:0.0.1"
         elif image == "kali":
             image = "cypherpunkarmory/kali:0.0.1"
+        elif image == "alpine":
+            image = "cypherpunkarmory/alpine:0.0.1"
+        elif image == "arch":
+            image = "cypherpunkarmory/arch:0.0.1"
         else:
             image = "cypherpunkarmory/ubuntu:0.0.1"
 
